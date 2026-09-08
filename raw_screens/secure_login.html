@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CipherVault - Secure Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-on-surface": "#283044",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-tint": "#c0c1ff",
+                        "on-surface-variant": "#c7c4d7",
+                        "outline": "#908fa0",
+                        "outline-variant": "#464554",
+                        "tertiary-container": "#ca8100",
+                        "on-tertiary-container": "#3e2400",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#4edea3",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-container-lowest": "#060e20",
+                        "on-error": "#690005",
+                        "surface-bright": "#31394d",
+                        "surface-container-highest": "#2d3449",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-container": "#00a572",
+                        "secondary": "#4edea3",
+                        "on-secondary-container": "#00311f",
+                        "on-primary-container": "#0d0096",
+                        "on-primary": "#1000a9",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-background": "#dae2fd",
+                        "on-primary-fixed": "#07006c",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#93000a",
+                        "surface-container": "#171f33",
+                        "surface-container-high": "#222a3d",
+                        "on-secondary": "#003824",
+                        "surface-variant": "#2d3449",
+                        "on-tertiary": "#472a00",
+                        "tertiary": "#ffb95f",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container-low": "#131b2e",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface": "#dae2fd",
+                        "primary": "#c0c1ff",
+                        "background": "#0b1326",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-container": "#8083ff",
+                        "surface": "#0b1326",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-dim": "#0b1326",
+                        "inverse-primary": "#494bd6",
+                        "inverse-surface": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "code-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(144, 143, 160, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(144, 143, 160, 0.05) 1px, transparent 1px);
+        }
+        .glow-btn {
+            box-shadow: inset 0 0 10px rgba(192, 193, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glow-btn:hover {
+            box-shadow: inset 0 0 20px rgba(192, 193, 255, 0.5), 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased relative overflow-hidden">
+<!-- Background Elements -->
+<div class="absolute inset-0 grid-pattern pointer-events-none z-0"></div>
+<div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[80px] pointer-events-none z-0"></div>
+<!-- Top Navigation (Transactional, no shell nav logic per prompt, just a brand anchor) -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center w-full px-margin-mobile h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary dark:text-primary-fixed-dim">CIPHER_VAULT</span>
+</div>
+<div>
+<span class="text-label-caps font-label-caps text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">wifi</span> SECURE CONNECTION
+                </span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex items-center justify-center z-10 px-4 pt-20 pb-10">
+<div class="glass-panel rounded-xl w-full max-w-md p-8 shadow-2xl relative overflow-hidden">
+<!-- Shimmer effect element -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50 animate-pulse"></div>
+<div class="text-center mb-8">
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-2">Access Vault</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Enter credentials to decrypt session.</p>
+</div>
+<form action="#" class="space-y-6" method="POST">
+<!-- Email Input -->
+<div class="space-y-2">
+<label class="text-label-caps font-label-caps text-on-surface-variant block" for="email">IDENTIFIER (EMAIL)</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">account_circle</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors placeholder:text-outline-variant" id="email" name="email" placeholder="admin@ciphervault.local" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-2">
+<label class="text-label-caps font-label-caps text-on-surface-variant flex justify-between" for="password">
+<span>PASSPHRASE</span>
+<a class="text-primary hover:text-primary-fixed transition-colors" href="#">Forgot?</a>
+</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">key</span>
+</div>
+<input class="block w-full pl-10 pr-10 py-3 bg-surface-container-low border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Action Button -->
+<div class="pt-4">
+<button class="w-full flex justify-center items-center gap-2 py-4 px-6 bg-[#6366F1] hover:bg-[#4f46e5] text-white rounded-lg text-headline-sm font-headline-sm glow-btn active:scale-95 duration-100" type="submit">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock_open</span>
+                        Secure Login
+                    </button>
+</div>
+</form>
+<div class="mt-8 pt-6 border-t border-outline-variant/30 text-center">
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                    New Operative? 
+                    <a class="text-secondary hover:text-secondary-fixed transition-colors font-semibold ml-1" href="#">Request Access Provisioning</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Footer for subtle security info -->
+<footer class="w-full py-4 text-center z-10 bg-surface/50 backdrop-blur-sm border-t border-outline-variant/10">
+<p class="text-code-sm font-code-sm text-outline-variant">
+            SYS.VER: 4.9.2 | ENCRYPTION: AES-256-GCM | TERMINAL: ACTIVE
+        </p>
+</footer>
+</body></html>

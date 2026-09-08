@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CipherVault - Secure Relational Message Vault</title>
+    <!-- Tailwind CSS with Forms and Container Queries plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-on-surface": "#283044",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-tint": "#c0c1ff",
+                        "on-surface-variant": "#c7c4d7",
+                        "outline": "#908fa0",
+                        "outline-variant": "#464554",
+                        "tertiary-container": "#ca8100",
+                        "on-tertiary-container": "#3e2400",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#4edea3",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-container-lowest": "#060e20",
+                        "on-error": "#690005",
+                        "surface-bright": "#31394d",
+                        "surface-container-highest": "#2d3449",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-container": "#00a572",
+                        "secondary": "#4edea3",
+                        "on-secondary-container": "#00311f",
+                        "on-primary-container": "#0d0096",
+                        "on-primary": "#1000a9",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-background": "#dae2fd",
+                        "on-primary-fixed": "#07006c",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#93000a",
+                        "surface-container": "#171f33",
+                        "surface-container-high": "#222a3d",
+                        "on-secondary": "#003824",
+                        "surface-variant": "#2d3449",
+                        "on-tertiary": "#472a00",
+                        "tertiary": "#ffb95f",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container-low": "#131b2e",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface": "#dae2fd",
+                        "primary": "#c0c1ff",
+                        "background": "#0b1326",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-container": "#8083ff",
+                        "surface": "#0b1326",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-dim": "#0b1326",
+                        "inverse-primary": "#494bd6",
+                        "inverse-surface": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "code-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+    <link href="index.css" rel="stylesheet"/>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased relative selection:bg-primary/30 selection:text-primary">
+    
+    <!-- Background Grid Pattern -->
+    <div class="absolute inset-0 grid-pattern pointer-events-none z-0"></div>
+    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[80px] pointer-events-none z-0"></div>
+
+    <!-- Shell Header (TopAppBar) -->
+    <header id="shell-header" class="fixed top-0 w-full z-40 bg-surface/85 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-4 sm:px-6 h-16 hidden">
+        <div class="flex items-center gap-3">
+            <button id="btn-mobile-menu" class="md:hidden text-on-surface-variant hover:text-on-surface p-2 -ml-2 rounded-lg hover:bg-surface-variant/50 transition-colors focus:outline-none flex items-center justify-center" aria-label="Open Navigation Menu">
+                <span class="material-symbols-outlined text-[24px]">menu</span>
+            </button>
+            <div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant/50 shrink-0">
+                <img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8t_ikY6Xu9mRJcy3WkHiCgg5JvD5ffGcqv_2IQ6vSbJCO4xJVZGJbwpojnH8ln61spGbzwA1X8EcPR0V8B5p_dlfBeBb_RYpcfK7nNmgYP0TGY_FRLXzWUXaLbakLCXburIADmTLGanVHYz7Zp-LHk_8VeYUpK7vw9bkBRtqc6hU4XAfOKKQODp1LgVQBEDZJ7pUTyI1uC3e4_m2kos9XM7PjJhac1iYQmnD4vuR-rJxjJLbOqUZSjA"/>
+            </div>
+            <span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary dark:text-primary-fixed-dim select-none">CIPHER_VAULT</span>
+        </div>
+        <div class="flex items-center gap-1 sm:gap-2">
+            <button data-action="goto-settings" class="text-on-surface-variant hover:text-on-surface hover:opacity-100 active:scale-95 transition-all duration-100 flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-variant/50" title="Security Settings">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+
+    <!-- Shell Sidebar (Responsive Drawer on Mobile, Docked on Desktop) -->
+    <aside id="shell-sidebar" class="fixed top-0 bottom-0 left-0 w-72 md:w-64 bg-surface-container-low/95 md:bg-surface-container-low/80 border-r border-outline-variant/20 p-4 z-50 md:z-30 md:top-16 backdrop-blur-xl md:backdrop-blur-md flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out hidden shadow-2xl md:shadow-none">
+        <!-- Mobile Drawer Header -->
+        <div class="flex md:hidden items-center justify-between pb-3 mb-2 border-b border-outline-variant/20">
+            <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[18px]">shield_lock</span>
+                </div>
+                <span class="font-bold text-headline-sm tracking-tight text-primary">CIPHER_VAULT</span>
+            </div>
+            <button id="btn-close-sidebar" class="text-on-surface-variant hover:text-on-surface p-1.5 rounded-lg hover:bg-surface-variant/50 transition-colors" aria-label="Close Navigation Menu">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+        </div>
+
+        <nav class="flex-1 space-y-1 mt-2 overflow-y-auto custom-scrollbar">
+            <a class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors relative" href="#dashboard">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <span class="font-body-md text-sm">Dashboard</span>
+                <div class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full hidden"></div>
+            </a>
+            <a class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors relative" href="#encrypt">
+                <span class="material-symbols-outlined text-[20px]">lock</span>
+                <span class="font-body-md text-sm">Encrypt</span>
+                <div class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full hidden"></div>
+            </a>
+            <a class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors relative" href="#decrypt">
+                <span class="material-symbols-outlined text-[20px]">lock_open</span>
+                <span class="font-body-md text-sm">Decrypt</span>
+                <div class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full hidden"></div>
+            </a>
+            <a class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors relative" href="#key-gen">
+                <span class="material-symbols-outlined text-[20px]">vpn_key</span>
+                <span class="font-body-md text-sm">Key Generator</span>
+                <div class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full hidden"></div>
+            </a>
+            <a class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors relative" href="#history">
+                <span class="material-symbols-outlined text-[20px]">history</span>
+                <span class="font-body-md text-sm">Vault History</span>
+                <div class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full hidden"></div>
+            </a>
+            <a class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors relative" href="#export">
+                <span class="material-symbols-outlined text-[20px]">database</span>
+                <span class="font-body-md text-sm">Database Backup</span>
+                <div class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full hidden"></div>
+            </a>
+            <a class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors relative" href="#settings">
+                <span class="material-symbols-outlined text-[20px]">settings</span>
+                <span class="font-body-md text-sm">Security Settings</span>
+                <div class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full hidden"></div>
+            </a>
+        </nav>
+        <!-- Logout button at bottom of sidebar -->
+        <div class="pt-3 mt-auto border-t border-outline-variant/20">
+            <button data-action="destroy-session" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-error hover:bg-error/10 transition-colors">
+                <span class="material-symbols-outlined text-[20px]">power_settings_new</span>
+                <span class="font-body-md text-sm font-medium">Destroy Session</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Shell BottomNavBar (Mobile Only) -->
+    <nav id="shell-bottom-nav" class="md:hidden fixed bottom-0 left-0 w-full z-30 flex justify-around items-center px-2 py-2 pb-3.5 bg-surface-container/95 backdrop-blur-xl border-t border-outline-variant/30 shadow-2xl hidden">
+        <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-150 p-1 rounded-lg min-w-[54px]" href="#dashboard">
+            <span class="material-symbols-outlined text-[22px] mb-0.5">dashboard</span>
+            <span class="text-[10px] font-label-caps tracking-tight font-medium">Dashboard</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-150 p-1 rounded-lg min-w-[54px]" href="#encrypt">
+            <span class="material-symbols-outlined text-[22px] mb-0.5">lock</span>
+            <span class="text-[10px] font-label-caps tracking-tight font-medium">Encrypt</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-150 p-1 rounded-lg min-w-[54px]" href="#decrypt">
+            <span class="material-symbols-outlined text-[22px] mb-0.5">lock_open</span>
+            <span class="text-[10px] font-label-caps tracking-tight font-medium">Decrypt</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-150 p-1 rounded-lg min-w-[54px]" href="#history">
+            <span class="material-symbols-outlined text-[22px] mb-0.5">history</span>
+            <span class="text-[10px] font-label-caps tracking-tight font-medium">History</span>
+        </a>
+        <button id="btn-bottom-menu" class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 active:scale-95 transition-all duration-150 p-1 rounded-lg min-w-[54px]" type="button">
+            <span class="material-symbols-outlined text-[22px] mb-0.5">menu</span>
+            <span class="text-[10px] font-label-caps tracking-tight font-medium">More</span>
+        </button>
+    </nav>
+
+    <!-- Main View Routing Canvas -->
+    <main id="main-container" class="flex-grow flex items-center justify-center w-full min-h-[calc(100vh-64px)] px-4 z-10 transition-all duration-300">
+
+        <!-- 1. LOGIN VIEW -->
+        <div id="login-view" class="view-container w-full max-w-md glass-panel rounded-xl p-6 sm:p-8 shadow-2xl relative overflow-hidden view-visible">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50 animate-pulse"></div>
+            <div class="text-center mb-6 sm:mb-8">
+                <h1 class="text-2xl sm:text-headline-lg font-headline-lg text-on-surface mb-2">Access Vault</h1>
+                <p class="text-body-sm sm:text-body-md font-body-md text-on-surface-variant">Enter credentials to decrypt session.</p>
+            </div>
+            
+            <form id="login-form" class="space-y-5 sm:space-y-6">
+                <!-- Username / Email -->
+                <div class="space-y-2">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant block text-xs" for="login-email">IDENTIFIER (EMAIL)</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-outline">account_circle</span>
+                        </div>
+                        <input class="block w-full pl-10 pr-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors placeholder:text-outline-variant text-sm sm:text-base" id="login-email" placeholder="admin@ciphervault.local" required="" type="email" value="admin@ciphervault.local"/>
+                    </div>
+                </div>
+
+                <!-- Master Passphrase -->
+                <div class="space-y-2">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant flex justify-between text-xs" for="login-password">
+                        <span>PASSPHRASE</span>
+                        <a class="text-primary hover:text-primary-fixed transition-colors text-body-sm font-semibold" href="javascript:alert('Standard demonstration passphrase: admin123')">Need Help?</a>
+                    </label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-outline">key</span>
+                        </div>
+                        <input class="block w-full pl-10 pr-10 py-3 bg-surface-container-low border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors placeholder:text-outline-variant text-sm sm:text-base" id="login-password" placeholder="••••••••••••••••" required="" type="password" value="admin123"/>
+                        <button id="password-toggle" class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface transition-colors focus:outline-none min-w-[40px] justify-center" type="button" aria-label="Toggle password visibility">
+                            <span class="material-symbols-outlined text-[20px]">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Display -->
+                <div id="login-error" class="text-error text-code-sm font-code-sm bg-error/10 border border-error/20 p-3 rounded-lg hidden"></div>
+
+                <!-- Action Button -->
+                <div class="pt-2 sm:pt-4">
+                    <button class="w-full flex justify-center items-center gap-2 py-3.5 sm:py-4 px-6 bg-[#6366F1] hover:bg-[#4f46e5] text-white rounded-lg text-base sm:text-headline-sm font-headline-sm glow-btn active:scale-95 duration-100 font-semibold" type="submit">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock_open</span>
+                        Secure Login
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-outline-variant/30 text-center">
+                <p class="text-body-sm font-body-sm text-on-surface-variant">
+                    New Operative? 
+                    <a class="text-secondary hover:text-secondary-fixed transition-colors font-semibold ml-1" href="javascript:alert('Clearance levels are managed by System Admins. Access credentials for this demo are admin@ciphervault.local / admin123.')">Request Provisioning</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- 2. 2FA SETUP VIEW -->
+        <div id="2fa-setup-view" class="view-container w-full max-w-2xl bg-surface-container-high rounded-xl border border-outline-variant/30 shadow-lg overflow-hidden flex flex-col relative z-10 backdrop-blur-md view-hidden">
+            <!-- Progress Bar -->
+            <div class="h-1 w-full bg-surface-variant flex">
+                <div class="h-full bg-primary w-1/3 transition-all duration-500 ease-out"></div>
+            </div>
+            
+            <div class="p-5 sm:p-8 md:p-12 flex flex-col items-center text-center">
+                <div class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20 mb-4 sm:mb-6">
+                    <span class="text-label-caps font-label-caps text-primary uppercase tracking-widest text-xs">Step 1 of 3</span>
+                </div>
+                
+                <h1 class="text-xl sm:text-headline-lg font-headline-lg mb-3 sm:mb-4 text-on-surface">Enable Two-Factor Authentication</h1>
+                <p class="text-body-sm sm:text-body-lg font-body-lg text-on-surface-variant mb-6 sm:mb-10 max-w-md">
+                    Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.) to link your account.
+                </p>
+                
+                <!-- QR Code scan graphic -->
+                <div class="relative mb-6 sm:mb-10 group">
+                    <div class="p-4 sm:p-6 rounded-xl bg-white/5 border border-outline-variant/50 backdrop-blur-sm relative overflow-hidden flex items-center justify-center glow-effect transition-all duration-300 group-hover:border-primary/50">
+                        <div class="w-36 h-36 sm:w-48 sm:h-48 bg-cover bg-center rounded-md relative z-10 opacity-90 mix-blend-screen grayscale contrast-125" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAria5fsnx5v3Rf5HsL1NAqoxZFsxT0mw0iLtH02dHt-nuQwxPONwIicDamwZmi7L0XP8BXXLmBVI-3vhaO4YZQ4GxEEgo-ENwPDMnjwrTa_pyKyTNagpcT1MviFREtZCKS1gQuiHshEGNQUZ82lgr81GXv1LBo9tTWBRLL4lo_o0bm9V7_rdagRUitm-7o2vX3kR3jFxBPYGK1TmR2f-67EZvg70WZ-76LkabdEopW0b0L7Viqrx0iww')"></div>
+                        <div class="absolute left-0 w-full h-[2px] bg-primary shadow-[0_0_8px_2px_rgba(192,193,255,0.8)] scanner-line z-20 pointer-events-none"></div>
+                        <!-- Corner Accents -->
+                        <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary rounded-tl-md"></div>
+                        <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary rounded-tr-md"></div>
+                        <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary rounded-bl-md"></div>
+                        <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary rounded-br-md"></div>
+                    </div>
+                </div>
+
+                <!-- Manual Code -->
+                <div class="w-full max-w-sm mb-8 sm:mb-12">
+                    <p class="text-body-sm font-body-sm text-on-surface-variant mb-2">Can't scan the QR code?</p>
+                    <div class="flex items-center bg-surface-container rounded-lg border border-outline-variant/40 overflow-hidden group hover:border-primary/50 transition-colors">
+                        <code class="text-xs sm:text-code-md font-code-md text-primary-fixed-dim px-3 sm:px-4 py-2.5 sm:py-3 flex-grow text-center tracking-wider bg-transparent outline-none truncate">JBSWY3DPEHPK3PXP</code>
+                        <button onclick="navigator.clipboard.writeText('JBSWY3DPEHPK3PXP'); alert('Key copied.');" aria-label="Copy code" class="p-2.5 sm:p-3 bg-surface-variant hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none shrink-0">
+                            <span class="material-symbols-outlined text-[18px] sm:text-[20px]">content_copy</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-col sm:flex-row w-full gap-3 sm:gap-4 justify-center">
+                    <button onclick="handleLogout()" class="w-full sm:w-auto px-6 py-3 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors text-body-md font-headline-sm order-2 sm:order-1 focus:outline-none">
+                        Back
+                    </button>
+                    <button id="continue-btn" disabled class="w-full sm:w-auto px-8 py-3 rounded-lg bg-surface-variant text-on-surface-variant border border-outline-variant/30 cursor-not-allowed text-body-md font-headline-sm order-1 sm:order-2 transition-all duration-300 flex items-center justify-center gap-2">
+                        <span>Continue</span>
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. DASHBOARD VIEW -->
+        <div id="dashboard-view" class="view-container w-full max-w-6xl space-y-6 sm:space-y-8 view-hidden">
+            <!-- Welcome Section -->
+            <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-xl sm:text-headline-lg font-headline-lg text-on-surface">System Status: <span class="text-secondary font-code-md">SECURE</span></h2>
+                    <p class="text-body-sm sm:text-body-lg font-body-lg text-on-surface-variant max-w-2xl mt-0.5">Vault access granted. Ready for cryptographic operations.</p>
+                </div>
+            </section>
+            
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Action Card: Encrypt -->
+                <a href="#encrypt" class="col-span-1 bg-surface-container/50 border border-outline-variant/30 rounded-xl p-5 sm:p-6 relative overflow-hidden group hover:border-secondary transition-all duration-300 backdrop-blur-sm active:scale-[0.98] flex flex-col justify-between min-h-[170px]">
+                    <div class="absolute inset-0 bg-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none"></div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="bg-secondary-container/20 p-2.5 sm:p-3 rounded-lg text-secondary">
+                            <span class="material-symbols-outlined text-[28px] sm:text-[32px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        </div>
+                        <span class="text-[11px] font-label-caps text-secondary uppercase tracking-widest bg-secondary/10 px-2 py-0.5 rounded font-semibold">Action</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg sm:text-headline-md font-headline-md text-on-surface mb-1 relative z-10 group-hover:text-secondary transition-colors">Encrypt New Message</h3>
+                        <p class="text-body-sm font-body-sm text-on-surface-variant relative z-10 text-xs sm:text-sm">Secure text or files using AES-256-GCM. Generate highly secure payloads.</p>
+                    </div>
+                </a>
+                
+                <!-- Action Card: Decrypt -->
+                <a href="#decrypt" class="col-span-1 bg-surface-container/50 border border-outline-variant/30 rounded-xl p-5 sm:p-6 relative overflow-hidden group hover:border-primary transition-all duration-300 backdrop-blur-sm active:scale-[0.98] flex flex-col justify-between min-h-[170px]">
+                    <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none"></div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="bg-primary-container/20 p-2.5 sm:p-3 rounded-lg text-primary">
+                            <span class="material-symbols-outlined text-[28px] sm:text-[32px]" style="font-variation-settings: 'FILL' 1;">lock_open</span>
+                        </div>
+                        <span class="text-[11px] font-label-caps text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded font-semibold">Action</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg sm:text-headline-md font-headline-md text-on-surface mb-1 relative z-10 group-hover:text-primary transition-colors">Decrypt Message</h3>
+                        <p class="text-body-sm font-body-sm text-on-surface-variant relative z-10 text-xs sm:text-sm">Extract plain text from secured vaults using your private keys.</p>
+                    </div>
+                </a>
+                
+                <!-- Storage Status Widget -->
+                <div class="col-span-1 sm:col-span-2 lg:col-span-1 bg-surface-container-high border border-outline-variant/20 rounded-xl p-5 sm:p-6 flex flex-col justify-between min-h-[170px]">
+                    <div>
+                        <h3 class="text-body-sm sm:text-body-lg font-body-lg text-on-surface-variant mb-1 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm text-tertiary">database</span>
+                            Storage Status
+                        </h3>
+                        <div class="text-2xl sm:text-headline-lg font-headline-lg text-on-surface mt-1 sm:mt-2">
+                            <span id="dashboard-entry-count">0</span> <span class="text-body-sm sm:text-body-md font-body-md text-on-surface-variant">entries</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 sm:mt-6">
+                        <div class="flex justify-between text-code-sm font-code-sm text-outline mb-1.5 text-xs">
+                            <span>LocalStorage Quota</span>
+                            <span id="storage-percentage-text">1%</span>
+                        </div>
+                        <div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant/10">
+                            <div id="storage-bar" class="bg-tertiary h-full w-[1%] rounded-full shadow-[0_0_8px_rgba(255,185,95,0.5)]"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity List -->
+                <div class="col-span-1 sm:col-span-2 lg:col-span-3 bg-surface-container/30 border border-outline-variant/20 rounded-xl p-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4 sm:mb-6">
+                        <h3 class="text-base sm:text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-[20px] sm:text-[24px]">history</span>
+                            Recent Vault Activity
+                        </h3>
+                        <a class="text-xs sm:text-label-caps font-label-caps text-primary hover:text-primary-fixed transition-colors font-medium" href="#history">View All</a>
+                    </div>
+                    <div id="dashboard-recent-activity" class="flex flex-col gap-3">
+                        <!-- Loaded Dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ENCRYPT VIEW -->
+        <div id="encrypt-view" class="view-container w-full max-w-3xl glass-panel rounded-xl shadow-lg relative overflow-hidden view-hidden">
+            <!-- Default Input State -->
+            <div class="p-5 sm:p-6 md:p-8 flex flex-col gap-5 sm:gap-6" id="encrypt-input-state">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <h1 class="text-xl sm:text-headline-md font-headline-md text-primary-fixed-dim flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary-fixed-dim text-[24px] sm:text-[28px]">enhanced_encryption</span>
+                        Secure Encryption
+                    </h1>
+                    <div class="px-2.5 py-0.5 rounded-full bg-surface-variant text-[11px] font-label-caps text-on-surface-variant flex items-center gap-1.5 border border-outline-variant/30 font-semibold">
+                        <div class="w-2 h-2 rounded-full bg-error"></div>
+                        UNSECURED
+                    </div>
+                </div>
+                
+                <!-- Plain Text Area -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant flex justify-between text-xs" for="plaintext">
+                        <span>PLAIN TEXT MESSAGE</span>
+                        <span id="char-counter" class="text-outline">0 / 4096</span>
+                    </label>
+                    <div class="relative rounded-lg border border-outline-variant/50 bg-surface-container-lowest transition-all">
+                        <textarea class="w-full bg-transparent border-none text-body-md font-body-md text-on-surface p-3 sm:p-4 focus:ring-0 resize-y min-h-[120px] sm:min-h-[140px] text-sm sm:text-base" id="plaintext" placeholder="Enter sensitive data to encrypt..." rows="5"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Password & Key Generation -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-label-caps font-label-caps text-on-surface-variant text-xs" for="encrypt-password">ENCRYPTION PASSWORD</label>
+                        <div class="relative rounded-lg border border-outline-variant/50 bg-surface-container-lowest transition-all flex items-center">
+                            <span class="material-symbols-outlined text-outline ml-3 absolute">key</span>
+                            <input class="w-full bg-transparent border-none text-code-md font-code-md text-on-surface py-2.5 sm:py-3 pl-10 pr-10 focus:ring-0 tracking-widest text-sm" id="encrypt-password" placeholder="••••••••••••" type="password"/>
+                            <button id="enc-psw-toggle" class="absolute right-3 text-outline hover:text-on-surface transition-colors min-w-[32px] flex items-center justify-center" type="button" aria-label="Toggle password visibility">
+                                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                            </button>
+                        </div>
+                        <!-- Strength Meter -->
+                        <div class="flex gap-1 mt-1">
+                            <div id="enc-strength-1" class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+                            <div id="enc-strength-2" class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+                            <div id="enc-strength-3" class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+                            <div id="enc-strength-4" class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-label-caps font-label-caps text-on-surface-variant text-xs">CRYPTOGRAPHIC SALT (OPTIONAL)</label>
+                        <div class="flex gap-2">
+                            <div class="relative rounded-lg border border-outline-variant/50 bg-surface-container-lowest transition-all flex items-center flex-grow">
+                                <input class="w-full bg-transparent border-none text-code-sm font-code-sm text-outline py-2.5 sm:py-3 px-3 focus:ring-0 uppercase tracking-widest text-xs" id="salt-key" placeholder="AUTO-GENERATED" type="text"/>
+                            </div>
+                            <button class="px-3 sm:px-4 py-2 rounded-lg border border-outline-variant bg-surface-variant hover:bg-surface-container-high text-body-sm font-body-sm text-on-surface transition-colors flex items-center justify-center gap-1.5 shrink-0" id="btn-generate-salt" type="button">
+                                <span class="material-symbols-outlined text-[18px]">autorenew</span>
+                                <span class="text-xs font-semibold">Gen</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Button -->
+                <div class="mt-2 sm:mt-4 pt-4 sm:pt-6 border-t border-outline-variant/30 flex justify-end">
+                    <button class="bg-primary text-on-primary px-6 sm:px-8 py-3 rounded-lg text-body-md font-headline-sm font-semibold flex items-center gap-2 hover:bg-primary-fixed transition-all active:scale-95 glow-active w-full sm:w-auto justify-center shadow-[0_0_15px_rgba(192,193,255,0.15)]" id="btn-encrypt">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        Securely Encrypt
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Processing Overlay -->
+            <div class="absolute inset-0 bg-surface/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-4" id="processing-overlay" style="display:none;">
+                <span class="material-symbols-outlined text-[48px] text-primary animate-spin">sync</span>
+                <span class="text-body-md sm:text-body-lg font-code-md text-primary tracking-widest uppercase animate-pulse">Deriving Key & Encrypting...</span>
+            </div>
+            
+            <!-- Success State -->
+            <div class="p-5 sm:p-6 md:p-8 flex flex-col gap-5 sm:gap-6 h-full" id="encrypt-success-state" style="display:none;">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <h2 class="text-xl sm:text-headline-md font-headline-md text-secondary flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Encryption Successful
+                    </h2>
+                    <div class="px-2.5 py-0.5 rounded-full bg-secondary/10 text-[11px] font-label-caps text-secondary flex items-center gap-1.5 border border-secondary/30 font-semibold">
+                        <div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+                        SECURED
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-2 flex-grow">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant text-xs">SERIALIZED SECURE CONTAINER PAYLOAD (AES-256-GCM)</label>
+                    <div class="relative rounded-lg border border-secondary/30 bg-surface-container-lowest p-3 sm:p-4 flex-grow min-h-[160px] sm:min-h-[200px] max-h-72 overflow-hidden flex flex-col group">
+                        <div class="absolute inset-0 processing-shimmer pointer-events-none opacity-20"></div>
+                        <div class="overflow-y-auto pr-2 custom-scrollbar text-secondary opacity-90 break-all select-all font-code-sm text-code-sm" id="encrypted-output-code">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-6 border-t border-outline-variant/30 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+                    <button class="text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center sm:justify-start gap-1 py-2" id="btn-reset">
+                        <span class="material-symbols-outlined text-[18px]">refresh</span>
+                        Start Over
+                    </button>
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                        <button id="btn-copy-cipher" class="px-4 py-2.5 rounded-lg border border-outline-variant bg-transparent hover:bg-surface-variant text-body-sm font-body-sm text-on-surface transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                            <span id="copy-cipher-label">COPY</span>
+                        </button>
+                        <button id="btn-save-vault" class="px-4 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-fixed text-body-sm font-body-sm transition-colors flex items-center justify-center gap-2 font-semibold">
+                            <span class="material-symbols-outlined text-[18px]">save</span>
+                            Archive to Vault
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. DECRYPT VIEW -->
+        <div id="decrypt-view" class="view-container w-full max-w-3xl glass-panel rounded-xl shadow-lg relative overflow-hidden view-hidden">
+            <!-- Default Input State -->
+            <div class="p-5 sm:p-6 md:p-8 flex flex-col gap-5 sm:gap-6" id="decrypt-input-state">
+                <div class="flex items-center justify-between mb-1">
+                    <h1 class="text-xl sm:text-headline-md font-headline-md text-primary-fixed-dim flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary-fixed-dim text-[24px] sm:text-[28px]">lock_open</span>
+                        Payload Decryption
+                    </h1>
+                </div>
+                
+                <!-- Ciphertext Input -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant text-xs" for="decrypt-ciphertext">SECURE CONTAINER PAYLOAD (BASE64)</label>
+                    <textarea class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-code-sm font-code-sm text-on-surface p-3 sm:p-4 focus:ring-2 focus:ring-primary focus:border-transparent resize-y min-h-[120px] sm:min-h-[140px]" id="decrypt-ciphertext" placeholder="Paste the base64-encoded encrypted payload here..."></textarea>
+                </div>
+                
+                <!-- Passphrase Input -->
+                <div class="flex flex-col gap-2 w-full max-w-md">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant text-xs" for="decrypt-password">DECRYPTION PASSWORD</label>
+                    <div class="relative rounded-lg border border-outline-variant/50 bg-surface-container-lowest flex items-center">
+                        <span class="material-symbols-outlined text-outline ml-3 absolute">key</span>
+                        <input class="w-full bg-transparent border-none text-code-md font-code-md text-on-surface py-2.5 sm:py-3 pl-10 focus:ring-0 tracking-widest text-sm" id="decrypt-password" placeholder="••••••••••••" type="password"/>
+                    </div>
+                </div>
+                
+                <!-- Decrypt Button -->
+                <div class="mt-2 sm:mt-4 pt-4 sm:pt-6 border-t border-outline-variant/30 flex justify-end">
+                    <button class="bg-[#6366F1] text-white px-6 sm:px-8 py-3 rounded-lg text-body-md font-headline-sm font-semibold flex items-center gap-2 hover:bg-[#4f46e5] transition-all active:scale-95 glow-active w-full sm:w-auto justify-center" id="btn-decrypt">
+                        <span class="material-symbols-outlined">key_visualizer</span>
+                        Decrypt Payload
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Decrypt Processing Overlay -->
+            <div class="absolute inset-0 bg-surface/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-4" id="decrypt-processing-overlay" style="display:none;">
+                <span class="material-symbols-outlined text-[48px] text-primary animate-spin">sync</span>
+                <span class="text-body-md sm:text-body-lg font-code-md text-primary tracking-widest uppercase animate-pulse">Verifying Integrity & Decrypting...</span>
+            </div>
+            
+            <!-- Decrypt Success State -->
+            <div class="p-5 sm:p-6 md:p-8 flex flex-col gap-5 sm:gap-6 h-full" id="decrypt-success-state" style="display:none;">
+                <div class="flex items-center justify-between mb-1">
+                    <h2 class="text-xl sm:text-headline-md font-headline-md text-secondary flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">check_circle</span>
+                        Decryption Succeeded
+                    </h2>
+                </div>
+                
+                <!-- Decrypted Text Output -->
+                <div class="flex flex-col gap-2 flex-grow">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant text-xs">DECRYPTED PLAIN TEXT MESSAGE</label>
+                    <textarea readonly class="w-full bg-surface-container-lowest border border-secondary/30 rounded-lg text-body-md font-body-md text-on-surface p-3 sm:p-4 resize-y min-h-[140px] sm:min-h-[160px] focus:ring-0 text-sm sm:text-base" id="decrypted-output-code"></textarea>
+                </div>
+                
+                <div class="mt-4 pt-6 border-t border-outline-variant/30 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+                    <button class="text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center sm:justify-start gap-1 py-2" id="btn-clear-decrypt">
+                        <span class="material-symbols-outlined text-[18px]">refresh</span>
+                        Clear / Decrypt New
+                    </button>
+                    <button id="btn-copy-plain" class="px-6 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-fixed text-body-sm font-body-sm transition-colors flex items-center justify-center gap-2 font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                        Copy Text
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. KEY GENERATOR VIEW -->
+        <div id="key-gen-view" class="view-container w-full max-w-3xl glass-panel rounded-xl shadow-lg p-5 sm:p-6 md:p-8 flex flex-col gap-5 sm:gap-6 view-hidden">
+            <div>
+                <h1 class="text-xl sm:text-headline-md font-headline-md text-primary flex items-center gap-2 mb-1">
+                    <span class="material-symbols-outlined text-primary text-[24px] sm:text-[28px]">key</span>
+                    Cryptographic Key Generator
+                </h1>
+                <p class="text-xs sm:text-body-md font-body-md text-on-surface-variant">Generate cryptographically secure random keys locally on this device.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <!-- Select Key Type -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-label-caps font-label-caps text-on-surface-variant text-xs" for="keygen-type">KEY PROTOCOL</label>
+                    <select class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-body-md font-body-md text-on-surface py-2.5 sm:py-3 px-3 sm:px-4 focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm sm:text-base" id="keygen-type">
+                        <option value="aes-256">AES-256 Hex Master Key (256-bit)</option>
+                        <option value="aes-128">AES-128 Hex Master Key (128-bit)</option>
+                        <option value="pbkdf2-salt">PBKDF2 Cryptographic Salt (128-bit)</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-end">
+                    <button class="bg-primary text-on-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-body-md font-headline-sm font-semibold flex items-center gap-2 hover:bg-primary-fixed transition-all active:scale-95 w-full justify-center shadow-lg shadow-primary/10" id="btn-generate-key">
+                        <span class="material-symbols-outlined">autorenew</span>
+                        Generate Key
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Output container -->
+            <div class="flex flex-col gap-2 mt-2">
+                <label class="text-label-caps font-label-caps text-on-surface-variant text-xs">GENERATED SECURE HEX VALUE</label>
+                <div class="rounded-lg border border-outline-variant/30 bg-surface-container-lowest p-4 min-h-[80px] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 group">
+                    <div id="keygen-output-code" class="font-code-sm text-code-sm text-primary-fixed-dim break-all select-all flex-grow">
+                        <span class="opacity-40 italic">Select key protocol and click Generate Key...</span>
+                    </div>
+                    <button id="btn-copy-keygen" class="self-end sm:self-auto px-3.5 py-2 rounded-lg bg-surface-variant hover:bg-surface-container-high border border-outline-variant/50 transition-colors flex items-center justify-center gap-1.5 shadow-sm shrink-0">
+                        <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                        <span id="copy-keygen-label" class="text-label-caps font-label-caps font-bold px-1 text-on-surface text-xs">COPY</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. HISTORY VIEW -->
+        <div id="history-view" class="view-container w-full max-w-4xl space-y-6 sm:space-y-8 view-hidden">
+            <div>
+                <h1 class="text-xl sm:text-headline-lg font-headline-lg text-on-surface mb-1 sm:mb-2">Message Vault History</h1>
+                <p class="text-xs sm:text-body-md font-body-md text-on-surface-variant">Review and manage your securely archived transmissions stored in device memory.</p>
+            </div>
+            
+            <div id="history-records-container" class="space-y-3 sm:space-y-4">
+                <!-- Records list rendered dynamically -->
+            </div>
+        </div>
+
+        <!-- 8. SETTINGS VIEW -->
+        <div id="settings-view" class="view-container w-full max-w-4xl space-y-6 sm:space-y-8 view-hidden">
+            <header>
+                <h1 class="text-xl sm:text-headline-lg font-headline-lg text-on-background mb-1 sm:mb-2">Security Settings</h1>
+                <p class="text-xs sm:text-body-md font-body-md text-on-surface-variant">Manage your vault's cryptographic preferences and access controls.</p>
+            </header>
+            
+            <!-- Profile Section -->
+            <section class="glass-panel border border-outline-variant/30 rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6 relative overflow-hidden glow-border">
+                <div class="absolute -top-12 -right-12 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="w-16 h-16 rounded-full bg-surface-container-lowest overflow-hidden border-2 border-outline-variant/50 shrink-0 shadow-lg">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnoD3cELU4Nxvo4rmyE0W6T5BH3FKsOpvfFQ6l3-12gzO_H_NotvcgmWB3oiIup99PV9ohZapOBe34vhB3ebD2CUJe1d5iBEjSjr9kx9oyDdn6ymb9g9esKJOXJAIwJ3QmgpIvqGUHGaoRqLCejs0riFkkfbf4KthxXLFCMuFFNyyz773f1v5JGeMKlOOZcxNhWr7tHKIX0947kfvs8IjjtpZ1fsbZaDckLetd-1ZvW1A5jBJrLMnzJQ"/>
+                </div>
+                <div class="flex-grow">
+                    <div class="text-[11px] sm:text-label-caps font-label-caps text-primary tracking-widest uppercase mb-1">VAULT_ID: <span class="font-code-sm text-code-sm ml-1 text-on-background/80">0x8A9F3E2C4</span></div>
+                    <div class="text-lg sm:text-headline-sm font-headline-sm text-on-background mb-1">System Administrator</div>
+                    <div class="flex items-center justify-center sm:justify-start gap-2">
+                        <span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(78,222,163,0.6)]"></span>
+                        <span class="text-xs sm:text-body-sm font-body-sm text-on-surface-variant">Tier 3 Clearance Active</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prominent 2FA Status Card -->
+            <section class="bg-surface-dim border border-primary/20 rounded-xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-primary rounded-l-xl"></div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 relative z-10">
+                    <div class="max-w-md">
+                        <div class="flex items-center gap-2.5 mb-1.5">
+                            <span class="material-symbols-outlined text-primary text-[22px] sm:text-[26px]" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+                            <h2 class="text-base sm:text-headline-md font-headline-md text-on-background">Two-Factor Authentication (2FA)</h2>
+                        </div>
+                        <p class="text-xs sm:text-body-md font-body-md text-on-surface-variant">Strengthen your vault's security perimeter. Accessing dashboard requires verified authenticator app token confirmations.</p>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-4 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-outline-variant/20">
+                        <span class="sm:hidden text-xs font-medium text-on-surface-variant">Status</span>
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggle-2fa" class="sr-only peer" checked>
+                            <div class="relative w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface-variant after:border-outline after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary peer-checked:after:bg-on-primary"></div>
+                            <span class="ml-3 text-body-md text-on-background font-medium text-sm">ON</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Grid -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <!-- Biometric Switch -->
+                <div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-4 sm:p-5 flex items-center justify-between hover:bg-surface-container transition-colors group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant/20 flex items-center justify-center group-hover:border-primary/30 transition-colors shrink-0">
+                            <span class="material-symbols-outlined text-primary text-[22px]">fingerprint</span>
+                        </div>
+                        <div>
+                            <div class="text-sm sm:text-body-md font-body-md text-on-background font-medium mb-0.5">Biometric Unlock</div>
+                            <div class="text-xs sm:text-body-sm font-body-sm text-on-surface-variant">Unlock via device hardware auth</div>
+                        </div>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer ml-3">
+                        <input type="checkbox" id="toggle-biometrics" class="sr-only peer">
+                        <div class="relative w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface-variant after:border-outline after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary peer-checked:after:bg-on-primary"></div>
+                    </label>
+                </div>
+                
+                <!-- Cloud Sync Switch -->
+                <div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-4 sm:p-5 flex items-center justify-between hover:bg-surface-container transition-colors group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant/20 flex items-center justify-center group-hover:border-primary/30 transition-colors shrink-0">
+                            <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors text-[22px]">cloud_sync</span>
+                        </div>
+                        <div>
+                            <div class="text-sm sm:text-body-md font-body-md text-on-background font-medium mb-0.5">Encrypted Sync</div>
+                            <div class="text-xs sm:text-body-sm font-body-sm text-on-surface-variant">Sync encrypted database to clouds</div>
+                        </div>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer ml-3">
+                        <input type="checkbox" id="toggle-cloud-sync" class="sr-only peer">
+                        <div class="relative w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface-variant after:border-outline after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary peer-checked:after:bg-on-primary"></div>
+                    </label>
+                </div>
+            </section>
+        </div>
+
+        <!-- 9. DATABASE BACKUP EXPORT VIEW -->
+        <div id="export-view" class="view-container w-full max-w-[760px] flex flex-col gap-6 sm:gap-8 view-hidden">
+            <!-- Header Section -->
+            <div class="flex flex-col gap-1 sm:gap-2">
+                <h1 class="text-xl sm:text-headline-lg font-headline-lg text-on-background">Secure Data Backup Export</h1>
+                <p class="text-xs sm:text-body-lg font-body-lg text-on-surface-variant">Generate an encrypted archive backup of your vault transmission history records.</p>
+            </div>
+            
+            <!-- Stats Bento Card -->
+            <div class="bg-surface-container/60 backdrop-blur-md border border-outline-variant/30 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between shadow-sm relative overflow-hidden group gap-4">
+                <div class="absolute -top-16 -right-16 w-48 h-48 bg-primary-container/10 rounded-full blur-3xl group-hover:bg-primary-container/20 transition-all duration-700 pointer-events-none"></div>
+                <div class="flex items-center gap-3.5 relative z-10">
+                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-lg bg-surface-container-highest flex items-center justify-center border border-outline-variant/50 shadow-inner shrink-0">
+                        <span class="material-symbols-outlined text-primary text-[22px] sm:text-[24px]">database</span>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-headline-sm font-headline-sm text-on-surface">Memory Index Vault</h3>
+                        <p class="text-xs font-code-sm text-on-surface-variant mt-0.5">Status: Operational & Ready</p>
+                    </div>
+                </div>
+                
+                <div class="sm:text-right relative z-10 bg-surface-container-lowest/50 p-2.5 sm:p-3 rounded-lg border border-outline-variant/20 flex flex-row sm:flex-col justify-between gap-2 sm:gap-1">
+                    <div class="flex sm:justify-end gap-3 sm:gap-6 items-baseline">
+                        <span class="text-xs font-body-sm text-on-surface-variant">Total Indexed</span>
+                        <span id="export-records-count" class="font-code-md text-code-md text-secondary font-bold text-sm">0</span>
+                    </div>
+                    <div class="flex sm:justify-end gap-3 sm:gap-6 items-baseline">
+                        <span class="text-xs font-body-sm text-on-surface-variant">Volume</span>
+                        <span id="export-volume-text" class="font-code-md text-code-md text-primary-fixed-dim font-bold text-sm">0 KB</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Backup Form Configuration -->
+            <form class="flex flex-col gap-6 sm:gap-8" onsubmit="event.preventDefault();">
+                <!-- Protocol Selection -->
+                <div class="flex flex-col gap-3 sm:gap-4">
+                    <label class="font-label-caps text-label-caps text-on-surface-variant tracking-widest text-xs">EXPORT ARCHIVE FORMAT PROTOCOL</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4" id="format-selection">
+                        <!-- Option 1: Encrypted SQL -->
+                        <label class="relative flex flex-col p-4 rounded-xl border-2 border-primary bg-primary/5 cursor-pointer hover:bg-primary/10 transition-all radio-card group">
+                            <input checked="" class="sr-only" name="format" type="radio" value="sql"/>
+                            <div class="flex justify-between items-start mb-2.5">
+                                <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform text-[22px]">lock_clock</span>
+                                <div class="w-5 h-5 rounded-full border-2 border-primary bg-primary flex items-center justify-center radio-indicator transition-colors">
+                                    <div class="w-2 h-2 rounded-full bg-background indicator-inner"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm sm:text-headline-sm font-headline-sm text-on-surface mb-0.5">Encrypted SQL</span>
+                            <span class="text-xs font-body-sm text-on-surface-variant">Relational SQL Schema.</span>
+                        </label>
+                        
+                        <!-- Option 2: JSON -->
+                        <label class="relative flex flex-col p-4 rounded-xl border border-outline-variant/50 bg-surface-container hover:bg-surface-container-highest cursor-pointer transition-all radio-card group">
+                            <input class="sr-only" name="format" type="radio" value="json"/>
+                            <div class="flex justify-between items-start mb-2.5">
+                                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed-dim transition-colors text-[22px]">data_object</span>
+                                <div class="w-5 h-5 rounded-full border-2 border-outline-variant radio-indicator transition-colors"></div>
+                            </div>
+                            <span class="text-sm sm:text-headline-sm font-headline-sm text-on-surface mb-0.5">JSON Data</span>
+                            <span class="text-xs font-body-sm text-on-surface-variant">Portability standard format.</span>
+                        </label>
+                        
+                        <!-- Option 3: CSV -->
+                        <label class="relative flex flex-col p-4 rounded-xl border border-outline-variant/50 bg-surface-container hover:bg-surface-container-highest cursor-pointer transition-all radio-card group">
+                            <input class="sr-only" name="format" type="radio" value="csv"/>
+                            <div class="flex justify-between items-start mb-2.5">
+                                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed-dim transition-colors text-[22px]">table</span>
+                                <div class="w-5 h-5 rounded-full border-2 border-outline-variant radio-indicator transition-colors"></div>
+                            </div>
+                            <span class="text-sm sm:text-headline-sm font-headline-sm text-on-surface mb-0.5">Raw CSV</span>
+                            <span class="text-xs font-body-sm text-on-surface-variant">Spreadsheets tabular text.</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Passphrase Field -->
+                <div class="flex flex-col gap-2.5 sm:gap-3">
+                    <label class="font-label-caps text-label-caps text-on-surface-variant tracking-widest text-xs" for="export_passphrase">Nested Archive Encryption Key (Optional, AES-GCM)</label>
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-primary/5 rounded-xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none"></div>
+                        <input class="relative w-full bg-surface-container-lowest border border-outline-variant/50 rounded-xl px-4 py-3 sm:py-4 pl-11 font-code-md text-code-md text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-inner text-sm sm:text-base" id="export_passphrase" placeholder="Define backup passphrase (min 16 chars)..." type="password"/>
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary transition-colors z-10 text-[20px]">key</span>
+                        <button id="export-psw-toggle" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface transition-colors z-10 focus:outline-none min-w-[32px] flex items-center justify-center" type="button" title="Toggle visibility">
+                            <span id="export-visibility-icon" class="material-symbols-outlined text-[20px]">visibility_off</span>
+                        </button>
+                    </div>
+                    <!-- Strength meter -->
+                    <div class="flex flex-col gap-1.5 mt-1">
+                        <div class="flex gap-1 h-1.5 w-full">
+                            <div class="flex-1 bg-surface-variant rounded-l-full transition-colors duration-300" id="export-strength-1"></div>
+                            <div class="flex-1 bg-surface-variant transition-colors duration-300" id="export-strength-2"></div>
+                            <div class="flex-1 bg-surface-variant transition-colors duration-300" id="export-strength-3"></div>
+                            <div class="flex-1 bg-surface-variant rounded-r-full transition-colors duration-300" id="export-strength-4"></div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-body-sm text-body-sm text-on-surface-variant">Recommended: min 16 characters.</span>
+                            <span class="font-code-sm text-code-sm text-outline-variant" id="export-strength-text">Awaiting input</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Button -->
+                <div class="pt-2 sm:pt-4">
+                    <button id="btn-download-backup" class="w-full bg-inverse-primary hover:bg-inverse-primary/90 text-surface-container-lowest font-headline-sm text-headline-sm py-3.5 sm:py-4 px-6 rounded-xl flex items-center justify-center gap-2.5 sm:gap-3 transition-all active:scale-[0.98] shadow-lg shadow-inverse-primary/20 group overflow-hidden relative font-semibold text-sm sm:text-base" type="button">
+                        <span class="material-symbols-outlined relative z-10 text-[20px] sm:text-[22px]">download</span>
+                        <span class="relative z-10">Generate & Download Backup</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Global Desktop Status Bar Footer -->
+    <footer id="desktop-status-bar" class="hidden md:block w-full py-3.5 text-center z-10 bg-surface/60 backdrop-blur-md border-t border-outline-variant/10 md:pl-64">
+        <div class="flex flex-col sm:flex-row justify-between items-center w-full px-6 max-w-container-max mx-auto font-code-sm text-code-sm text-outline-variant gap-2 text-xs">
+            <span>SYS.VER: 4.9.2 | AES-GCM-256</span>
+            <span class="hidden lg:inline opacity-80">SECURE VAULT CONTAINER IS ACTIVE</span>
+            <button data-action="destroy-session" class="text-error hover:underline flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">delete_forever</span> Destroy Active Session
+            </button>
+        </div>
+    </footer>
+
+    <!-- Core App logic link -->
+    <script src="app.js"></script>
+</body>
+</html>

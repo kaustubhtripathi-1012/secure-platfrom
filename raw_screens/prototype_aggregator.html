@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CipherVault - Interactive Prototype Aggregator</title>
+    <!-- Tailwind CSS with Forms and Container Queries plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#c0c1ff",
+                        "primary-container": "#8083ff",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "secondary": "#4edea3",
+                        "secondary-container": "#00a572",
+                        "tertiary": "#ffb95f",
+                        "background": "#0b1326",
+                        "surface": "#0b1326",
+                        "surface-container": "#171f33",
+                        "surface-container-high": "#222a3d",
+                        "surface-container-highest": "#2d3449",
+                        "surface-container-low": "#131b2e",
+                        "surface-container-lowest": "#060e20",
+                        "on-background": "#dae2fd",
+                        "on-surface": "#dae2fd",
+                        "on-surface-variant": "#c7c4d7",
+                        "outline": "#908fa0",
+                        "outline-variant": "#464554",
+                        "error": "#ffb4ab",
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+    <style>
+        .grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(144, 143, 160, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(144, 143, 160, 0.04) 1px, transparent 1px);
+        }
+        .glass-panel {
+            background: rgba(23, 31, 51, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(144, 143, 160, 0.15);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(11, 19, 38, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(144, 143, 160, 0.3);
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(192, 193, 255, 0.5);
+        }
+        
+        /* Iframe transition shimmer */
+        .iframe-container {
+            position: relative;
+        }
+        .iframe-loading::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(192, 193, 255, 0.08), transparent);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.5s infinite linear;
+            z-index: 10;
+            pointer-events: none;
+        }
+        @keyframes loading-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Mock Mobile device customizations */
+        .mobile-bezel {
+            box-shadow: 
+                0 0 0 12px #1f2937, /* outer bezel */
+                0 0 0 13px #374151, /* metal rim */
+                0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased relative overflow-hidden font-body-md select-none">
+    
+    <!-- Background Grid Pattern -->
+    <div class="absolute inset-0 grid-pattern pointer-events-none z-0"></div>
+    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[80px] pointer-events-none z-0"></div>
+
+    <!-- Shell Header -->
+    <header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-6 h-16">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-surface-container-high border border-primary/20 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(192,193,255,0.15)]">
+                <span class="material-symbols-outlined text-2xl font-bold">shield_lock</span>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary">CIPHER_VAULT</span>
+                <span class="text-[10px] font-code-sm text-outline tracking-wider -mt-1 uppercase">PROTOTYPE WORKSPACE AGGREGATOR</span>
+            </div>
+        </div>
+
+        <!-- Center Global Active Badge -->
+        <div class="hidden lg:flex items-center gap-4 bg-surface-container-lowest/80 px-4 py-1.5 rounded-full border border-outline-variant/30">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></span>
+                <span class="text-xs font-semibold text-on-surface" id="current-screen-badge">Dashboard</span>
+            </div>
+            <span class="text-outline text-xs">|</span>
+            <div class="flex items-center gap-1.5 text-xs text-on-surface-variant font-code-sm">
+                <span class="material-symbols-outlined text-sm">laptop</span> 1280px
+                <span class="mx-1">/</span>
+                <span class="material-symbols-outlined text-sm">smartphone</span> 375px
+            </div>
+        </div>
+
+        <!-- Right System Meta -->
+        <div class="flex items-center gap-3">
+            <span class="text-label-caps font-label-caps text-outline-variant text-[11px] hidden sm:flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs text-secondary">verified_user</span> CL.LEVEL: 4
+            </span>
+            <button onclick="refreshBothIframes()" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-variant/40 active:scale-95 duration-100" title="Refresh Previews">
+                <span class="material-symbols-outlined text-[20px]">refresh</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <div class="flex-grow pt-16 flex h-screen overflow-hidden z-10">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-80 flex flex-col bg-surface-container-low/40 border-r border-outline-variant/20 backdrop-blur-md">
+            <div class="p-4 border-b border-outline-variant/20">
+                <p class="text-label-caps font-label-caps text-outline text-[11px] tracking-wider mb-2">PROTOTYPE SCREENS (9)</p>
+                <div class="relative flex items-center">
+                    <input type="text" id="screen-search" oninput="filterScreens()" placeholder="Filter screens..." class="w-full bg-surface-container-lowest/50 border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent placeholder:text-outline-variant/60 transition-all">
+                    <span class="material-symbols-outlined absolute right-3 text-outline text-sm pointer-events-none">search</span>
+                </div>
+            </div>
+
+            <!-- Screen items scroll zone -->
+            <nav class="flex-1 overflow-y-auto p-3 space-y-2.5 custom-scrollbar" id="screen-list">
+                <!-- Javascript will render these list items dynamically -->
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-outline-variant/20 bg-surface-container-lowest/30">
+                <div class="flex items-center justify-between text-[11px] font-code-sm text-outline-variant">
+                    <span>SYS: ACTIVE</span>
+                    <span>v4.9.2</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Preview Area -->
+        <main class="flex-1 flex flex-col bg-surface-container-lowest/10 relative overflow-hidden">
+            
+            <!-- Toolbar for Workspace Controls -->
+            <div class="h-14 border-b border-outline-variant/20 bg-surface-container-low/30 px-6 flex items-center justify-between flex-shrink-0">
+                
+                <!-- Left: View Mode Selectors -->
+                <div class="flex items-center gap-1.5 bg-surface-container-lowest/50 p-1 rounded-lg border border-outline-variant/30">
+                    <button onclick="setViewMode('split')" id="btn-mode-split" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all active:scale-95 duration-100 bg-primary text-on-primary shadow-sm">
+                        <span class="material-symbols-outlined text-[16px]">grid_view</span>
+                        <span>Split View</span>
+                    </button>
+                    <button onclick="setViewMode('desktop')" id="btn-mode-desktop" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all text-on-surface-variant hover:text-on-surface active:scale-95 duration-100">
+                        <span class="material-symbols-outlined text-[16px]">laptop</span>
+                        <span>Website (Desktop)</span>
+                    </button>
+                    <button onclick="setViewMode('mobile')" id="btn-mode-mobile" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all text-on-surface-variant hover:text-on-surface active:scale-95 duration-100">
+                        <span class="material-symbols-outlined text-[16px]">smartphone</span>
+                        <span>Mobile Only</span>
+                    </button>
+                </div>
+
+                <!-- Center: Zoom Slider for Desktop (Visible when desktop preview is shown) -->
+                <div class="flex items-center gap-3" id="desktop-zoom-controls">
+                    <span class="material-symbols-outlined text-outline text-[18px]">zoom_in</span>
+                    <input type="range" id="desktop-zoom-slider" min="0.45" max="1" step="0.05" value="0.75" oninput="handleZoomSliderInput(this.value)" class="w-32 accent-primary cursor-pointer bg-outline-variant/50 h-1 rounded-full appearance-none">
+                    <span class="text-xs font-code-md text-on-surface-variant w-16" id="zoom-percentage-text">75%</span>
+                    <button onclick="autoFitZoom()" class="text-[10px] font-label-caps border border-outline-variant/30 px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:border-primary/30 transition-all" title="Fit desktop mockup to screen">
+                        FIT VIEW
+                    </button>
+                </div>
+
+                <!-- Right: Options / Screen Details -->
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleGridBackground()" class="p-2 border border-outline-variant/30 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all active:scale-95 duration-100" title="Toggle Grid Background" id="btn-grid-toggle">
+                        <span class="material-symbols-outlined text-[18px]">grid_on</span>
+                    </button>
+                    <button onclick="openCurrentScreenInNewTab()" class="px-3.5 py-1.5 bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/20 text-xs font-semibold rounded-lg text-on-surface flex items-center gap-1.5 transition-all active:scale-95 duration-100" title="Open current screen file directly">
+                        <span>Open Screen File</span>
+                        <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Previews Workspace Scroll Area -->
+            <div class="flex-1 overflow-auto p-6 md:p-10 custom-scrollbar flex items-start justify-center gap-12" id="previews-container">
+                
+                <!-- 1. WEBSITE / DESKTOP PREVIEW FRAME -->
+                <div class="flex flex-col items-center gap-3 transition-all duration-300 flex-shrink-0" id="desktop-viewport-wrapper">
+                    <div class="flex items-center justify-between w-full px-1.5 select-none">
+                        <span class="text-xs font-semibold text-outline tracking-wider flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">web</span> WEBSITE / DESKTOP LAYOUT (1280 × 800)
+                        </span>
+                        <span class="text-xs font-code-sm text-outline-variant" id="desktop-scale-badge">Scale: 75%</span>
+                    </div>
+
+                    <!-- Laptop / Browser Device Mockup -->
+                    <div class="w-[1280px] bg-slate-950 rounded-2xl border border-outline-variant/40 shadow-2xl flex-shrink-0 overflow-hidden flex flex-col" id="desktop-device-mockup">
+                        <!-- Browser Header / Chrome -->
+                        <div class="bg-slate-900 px-4 py-3 flex items-center gap-3 border-b border-outline-variant/20 flex-shrink-0 select-none">
+                            <!-- Window Dots -->
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                            </div>
+                            <!-- Nav Arrows -->
+                            <div class="flex gap-1 text-slate-500 ml-2">
+                                <span class="material-symbols-outlined text-[18px] cursor-not-allowed">arrow_back</span>
+                                <span class="material-symbols-outlined text-[18px] cursor-not-allowed">arrow_forward</span>
+                            </div>
+                            <!-- Address Bar -->
+                            <div class="flex-grow max-w-lg mx-auto bg-slate-950/80 border border-outline-variant/20 rounded-lg py-1 px-3 flex items-center gap-2 text-slate-400 text-xs font-sans">
+                                <span class="material-symbols-outlined text-sm text-secondary">lock</span>
+                                <span class="text-slate-500">https://</span><span class="text-slate-300">ciphervault.local/</span><span class="text-primary/95 font-code-sm font-semibold" id="browser-url-suffix">dashboard.html</span>
+                                <span class="material-symbols-outlined text-xs ml-auto text-slate-500">star</span>
+                            </div>
+                        </div>
+
+                        <!-- Scaled Iframe View Area -->
+                        <div class="relative bg-[#0b1326] iframe-container" id="desktop-zoom-container" style="width: 1280px; height: 600px; overflow: hidden;">
+                            <iframe id="desktop-iframe" src="dashboard.html" class="absolute top-0 left-0 border-0 transform origin-top-left" style="width: 1280px; height: 800px; transform: scale(0.75);"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. MOBILE PREVIEW FRAME -->
+                <div class="flex flex-col items-center gap-3 transition-all duration-300 flex-shrink-0" id="mobile-viewport-wrapper">
+                    <div class="flex items-center justify-between w-full px-1.5 select-none">
+                        <span class="text-xs font-semibold text-outline tracking-wider flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">smartphone</span> MOBILE LAYOUT (375 × 812)
+                        </span>
+                        <span class="text-xs font-code-sm text-outline-variant">Scale: 100%</span>
+                    </div>
+
+                    <!-- Smartphone Device Mockup -->
+                    <div class="w-[375px] h-[812px] bg-slate-950 rounded-[44px] relative mobile-bezel flex-shrink-0 flex flex-col select-none overflow-hidden">
+                        
+                        <!-- Top Bezel Speaker Notch & Camera -->
+                        <div class="absolute top-3.5 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-full z-50 flex items-center justify-center">
+                            <!-- Lens reflection glow -->
+                            <div class="absolute right-4 w-2 h-2 rounded-full bg-slate-900/60 border border-indigo-950/20"></div>
+                        </div>
+
+                        <!-- Translucent iOS Status Bar Overlay -->
+                        <div class="absolute top-0 left-0 w-full h-11 px-7 flex justify-between items-center text-[11px] font-bold text-white z-40 bg-surface/10 backdrop-blur-md border-b border-white/5 pointer-events-none select-none">
+                            <span id="mobile-clock">19:29</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[12px] scale-x-[-1]">signal_cellular_4_bar</span>
+                                <span class="material-symbols-outlined text-[12px]">wifi</span>
+                                <span class="material-symbols-outlined text-[14px]">battery_full</span>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Screen Frame (Full Height, loads responsive screen) -->
+                        <div class="w-full h-full pt-11 pb-5 relative bg-[#0b1326] iframe-container">
+                            <iframe id="mobile-iframe" src="dashboard.html" class="w-full h-full border-0 bg-[#0b1326]"></iframe>
+                        </div>
+
+                        <!-- Home Indicator Bar -->
+                        <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-36 h-[4px] bg-white/45 rounded-full z-50 pointer-events-none"></div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Script for interactive actions -->
+    <script>
+        // List of all 9 prototype screens
+        const screens = [
+            {
+                id: 'dashboard',
+                file: 'dashboard.html',
+                title: 'System Dashboard',
+                desc: 'Main control center, key storage capacity, security widgets, and recent logs.',
+                icon: 'space_dashboard',
+                badge: 'Dashboard'
+            },
+            {
+                id: 'secure_login',
+                file: 'secure_login.html',
+                title: 'Secure Access Gateway',
+                desc: 'Access authentication page requiring system-approved master key credential passphrase.',
+                icon: 'login',
+                badge: 'Auth Gate'
+            },
+            {
+                id: '2fa_setup',
+                file: '2fa_setup.html',
+                title: 'Two-Factor Linking',
+                desc: 'Secure MFA provisioning workspace with interactive QR codes and code entries.',
+                icon: 'phonelink_lock',
+                badge: 'Security Flow'
+            },
+            {
+                id: 'encrypt_message',
+                file: 'encrypt_message.html',
+                title: 'Payload Encryption',
+                desc: 'Text/payload field inputs to compute AES-256-GCM cipher outputs using key salt.',
+                icon: 'enhanced_encryption',
+                badge: 'Operation'
+            },
+            {
+                id: 'decrypt_message',
+                file: 'decrypt_message.html',
+                title: 'Payload Decryption',
+                desc: 'Ciphertext decryption console providing private key recovery mechanisms.',
+                icon: 'no_encryption',
+                badge: 'Operation'
+            },
+            {
+                id: 'key_generation',
+                file: 'key_generation.html',
+                title: 'PBKDF2 Key Generator',
+                desc: 'High-entropy key generator with custom entropy bar gauges and passphrase generator.',
+                icon: 'vpn_key',
+                badge: 'Utility'
+            },
+            {
+                id: 'secure_history',
+                file: 'secure_history.html',
+                title: 'Cryptographic History',
+                desc: 'Data vault transaction record ledger displaying cryptographic details.',
+                icon: 'history',
+                badge: 'Audit Log'
+            },
+            {
+                id: 'database_export',
+                file: 'database_export.html',
+                title: 'Database Sync & Export',
+                desc: 'JSON backups, clear cache operations, and cloud storage connection status.',
+                icon: 'backup',
+                badge: 'Settings'
+            },
+            {
+                id: 'security_settings',
+                file: 'security_settings.html',
+                title: 'Security Configuration',
+                desc: 'Session timeouts, toggle security configurations (biometrics, secure logs, syncs).',
+                icon: 'admin_panel_settings',
+                badge: 'Settings'
+            }
+        ];
+
+        let activeScreenFile = 'dashboard.html';
+        let currentMode = 'split'; // split, desktop, mobile
+        let desktopZoom = 0.75;
+
+        // Initialize Workspace
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSidebar();
+            selectScreen(activeScreenFile);
+            updateClock();
+            setInterval(updateClock, 30000); // update clock every 30s
+            
+            // Auto fit zoom on resize if set to auto-fit
+            window.addEventListener('resize', () => {
+                if (document.getElementById('zoom-percentage-text').textContent.startsWith('Auto')) {
+                    autoFitZoom();
+                }
+            });
+            
+            // Set initial fit zoom
+            setTimeout(autoFitZoom, 300);
+        });
+
+        // Update Dynamic Clock in Phone Status Bar
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('mobile-clock').textContent = `${hours}:${minutes}`;
+        }
+
+        // Render Sidebar Navigation Screen Items
+        function renderSidebar() {
+            const listContainer = document.getElementById('screen-list');
+            listContainer.innerHTML = '';
+
+            screens.forEach(screen => {
+                const item = document.createElement('a');
+                item.href = `#${screen.id}`;
+                item.id = `sidebar-${screen.id}`;
+                item.onclick = (e) => {
+                    e.preventDefault();
+                    selectScreen(screen.file);
+                };
+                item.className = "flex items-start gap-3 p-3 rounded-xl border border-transparent text-on-surface-variant hover:bg-surface-container-high/50 hover:text-on-surface transition-all duration-200 group active:scale-[0.98]";
+                
+                item.innerHTML = `
+                    <div class="p-2 rounded-lg bg-surface-container-low border border-outline-variant/30 group-hover:border-primary/20 group-hover:text-primary transition-colors flex-shrink-0">
+                        <span class="material-symbols-outlined text-[20px] flex items-center">${screen.icon}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-1 mb-0.5">
+                            <span class="font-semibold text-xs text-on-surface group-hover:text-primary transition-colors truncate">${screen.title}</span>
+                            <span class="text-[9px] font-code-sm text-outline-variant bg-surface-container px-1.5 py-0.5 rounded border border-outline-variant/20 uppercase flex-shrink-0">${screen.badge}</span>
+                        </div>
+                        <p class="text-[10px] text-outline line-clamp-2 leading-tight">${screen.desc}</p>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        // Handle Selecting a Screen
+        function selectScreen(file) {
+            activeScreenFile = file;
+            const screen = screens.find(s => s.file === file);
+            if (!screen) return;
+
+            // Update badge in top bar
+            document.getElementById('current-screen-badge').textContent = screen.title;
+            document.getElementById('browser-url-suffix').textContent = screen.file;
+
+            // Highlight Sidebar item
+            screens.forEach(s => {
+                const link = document.getElementById(`sidebar-${s.id}`);
+                if (link) {
+                    if (s.file === file) {
+                        link.classList.remove('text-on-surface-variant', 'border-transparent');
+                        link.classList.add('bg-primary/10', 'text-primary', 'border-primary/20', 'shadow-sm');
+                        // Highlight icon specifically
+                        const iconBox = link.querySelector('.bg-surface-container-low');
+                        if (iconBox) iconBox.classList.add('border-primary/40', 'text-primary', 'bg-primary/5');
+                    } else {
+                        link.classList.add('text-on-surface-variant', 'border-transparent');
+                        link.classList.remove('bg-primary/10', 'text-primary', 'border-primary/20', 'shadow-sm');
+                        const iconBox = link.querySelector('.bg-surface-container-low');
+                        if (iconBox) iconBox.classList.remove('border-primary/40', 'text-primary', 'bg-primary/5');
+                    }
+                }
+            });
+
+            // Update IFrames with loading state
+            const deskIframe = document.getElementById('desktop-iframe');
+            const mobIframe = document.getElementById('mobile-iframe');
+            
+            // Add loading effect
+            deskIframe.parentElement.classList.add('iframe-loading');
+            mobIframe.parentElement.classList.add('iframe-loading');
+
+            // Load URLs
+            deskIframe.src = file;
+            mobIframe.src = file;
+
+            // Remove loading state on load
+            deskIframe.onload = () => deskIframe.parentElement.classList.remove('iframe-loading');
+            mobIframe.onload = () => mobIframe.parentElement.classList.remove('iframe-loading');
+        }
+
+        // Set View Mode
+        function setViewMode(mode) {
+            currentMode = mode;
+            const container = document.getElementById('previews-container');
+            const deskWrapper = document.getElementById('desktop-viewport-wrapper');
+            const mobWrapper = document.getElementById('mobile-viewport-wrapper');
+            const zoomControls = document.getElementById('desktop-zoom-controls');
+
+            // Reset classes
+            deskWrapper.classList.remove('hidden');
+            mobWrapper.classList.remove('hidden');
+
+            // Mode Tabs styling
+            const modes = ['split', 'desktop', 'mobile'];
+            modes.forEach(m => {
+                const btn = document.getElementById(`btn-mode-${m}`);
+                if (m === mode) {
+                    btn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-on-primary shadow-sm transition-all active:scale-95 duration-100";
+                } else {
+                    btn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-on-surface-variant hover:text-on-surface transition-all active:scale-95 duration-100";
+                }
+            });
+
+            if (mode === 'split') {
+                zoomControls.classList.remove('invisible');
+                // Make sure scale is appropriate for side-by-side
+                autoFitZoom();
+            } else if (mode === 'desktop') {
+                mobWrapper.classList.add('hidden');
+                zoomControls.classList.remove('invisible');
+                // Fit desktop nicely in full space
+                autoFitZoom();
+            } else if (mode === 'mobile') {
+                deskWrapper.classList.add('hidden');
+                zoomControls.classList.add('invisible');
+            }
+        }
+
+        // Zoom Slider Handler
+        function handleZoomSliderInput(val) {
+            desktopZoom = parseFloat(val);
+            applyDesktopZoom(desktopZoom);
+            document.getElementById('zoom-percentage-text').textContent = `${Math.round(desktopZoom * 100)}%`;
+        }
+
+        // Apply Zoom Styles
+        function applyDesktopZoom(zoom) {
+            const iframe = document.getElementById('desktop-iframe');
+            const zoomContainer = document.getElementById('desktop-zoom-container');
+            
+            iframe.style.transform = `scale(${zoom})`;
+            iframe.style.width = `${1280}%`; // ensure base size is always 1280px
+            iframe.style.height = `${800 / zoom}px`; // adjust internal scroll size
+            
+            // Adjust visual box height based on scale
+            zoomContainer.style.height = `${800 * zoom}px`;
+            
+            // Update badge text
+            document.getElementById('desktop-scale-badge').textContent = `Scale: ${Math.round(zoom * 100)}%`;
+        }
+
+        // Auto Fit Desktop view based on parent width
+        function autoFitZoom() {
+            if (currentMode === 'mobile') return;
+            
+            const container = document.getElementById('previews-container');
+            const deskWrapper = document.getElementById('desktop-viewport-wrapper');
+            
+            // Get available width
+            let availableWidth = container.clientWidth - 48; // padding margins
+            if (currentMode === 'split') {
+                // Split view allocates space for mobile frame too (375px + gaps)
+                availableWidth = availableWidth - 375 - 48;
+            }
+            
+            // Calculate scale
+            let fitScale = availableWidth / 1280;
+            fitScale = Math.max(0.45, Math.min(fitScale, 1.0)); // bound between 45% and 100%
+            
+            desktopZoom = fitScale;
+            applyDesktopZoom(fitScale);
+
+            // Update UI Slider and labels
+            document.getElementById('desktop-zoom-slider').value = fitScale;
+            document.getElementById('zoom-percentage-text').textContent = `Auto (${Math.round(fitScale * 100)}%)`;
+        }
+
+        // Filter Screens in Sidebar
+        function filterScreens() {
+            const query = document.getElementById('screen-search').value.toLowerCase();
+            screens.forEach(screen => {
+                const item = document.getElementById(`sidebar-${screen.id}`);
+                if (item) {
+                    const text = `${screen.title} ${screen.desc} ${screen.badge}`.toLowerCase();
+                    if (text.includes(query)) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        // Refresh both views
+        function refreshBothIframes() {
+            const deskIframe = document.getElementById('desktop-iframe');
+            const mobIframe = document.getElementById('mobile-iframe');
+            
+            deskIframe.parentElement.classList.add('iframe-loading');
+            mobIframe.parentElement.classList.add('iframe-loading');
+            
+            deskIframe.contentWindow.location.reload();
+            mobIframe.contentWindow.location.reload();
+        }
+
+        // Open screen in a new browser tab
+        function openCurrentScreenInNewTab() {
+            window.open(activeScreenFile, '_blank');
+        }
+
+        // Toggle Grid Background
+        function toggleGridBackground() {
+            const body = document.body;
+            const pattern = body.querySelector('.grid-pattern');
+            const borderGlow = document.getElementById('btn-grid-toggle');
+            
+            if (pattern.classList.contains('hidden')) {
+                pattern.classList.remove('hidden');
+                borderGlow.classList.add('text-primary', 'bg-primary/10');
+            } else {
+                pattern.classList.add('hidden');
+                borderGlow.classList.remove('text-primary', 'bg-primary/10');
+            }
+        }
+    </script>
+</body>
+</html>

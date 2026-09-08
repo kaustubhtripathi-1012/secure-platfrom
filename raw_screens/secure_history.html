@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cipher Vault - Message History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffddb8",
+                      "inverse-on-surface": "#283044",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "surface-tint": "#c0c1ff",
+                      "on-surface-variant": "#c7c4d7",
+                      "outline": "#908fa0",
+                      "outline-variant": "#464554",
+                      "tertiary-container": "#ca8100",
+                      "on-tertiary-container": "#3e2400",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#4edea3",
+                      "primary-fixed": "#e1e0ff",
+                      "surface-container-lowest": "#060e20",
+                      "on-error": "#690005",
+                      "surface-bright": "#31394d",
+                      "surface-container-highest": "#2d3449",
+                      "secondary-fixed": "#6ffbbe",
+                      "secondary-container": "#00a572",
+                      "secondary": "#4edea3",
+                      "on-secondary-container": "#00311f",
+                      "on-primary-container": "#0d0096",
+                      "on-primary": "#1000a9",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-background": "#dae2fd",
+                      "on-primary-fixed": "#07006c",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "error-container": "#93000a",
+                      "surface-container": "#171f33",
+                      "surface-container-high": "#222a3d",
+                      "on-secondary": "#003824",
+                      "surface-variant": "#2d3449",
+                      "on-tertiary": "#472a00",
+                      "tertiary": "#ffb95f",
+                      "on-secondary-fixed": "#002113",
+                      "surface-container-low": "#131b2e",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-surface": "#dae2fd",
+                      "primary": "#c0c1ff",
+                      "background": "#0b1326",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "primary-container": "#8083ff",
+                      "surface": "#0b1326",
+                      "on-secondary-fixed-variant": "#005236",
+                      "surface-dim": "#0b1326",
+                      "inverse-primary": "#494bd6",
+                      "inverse-surface": "#dae2fd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "base": "8px",
+                      "container-max": "1280px",
+                      "margin-desktop": "40px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "code-sm": ["JetBrains Mono"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "headline-sm": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0F172A; /* Deep Navy */
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .card-bg {
+            background-color: #1E293B; /* Slate */
+            border: 1px solid #334155;
+        }
+        .active-modal {
+            backdrop-filter: blur(12px);
+            background-color: rgba(99, 102, 241, 0.05); /* Primary tint */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface antialiased min-h-screen flex flex-col pb-24 relative">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl fixed top-0 w-full z-50 shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A clean, modern, slightly abstract geometric logo for a secure digital vault application. The logo features sharp angles, perhaps suggesting a stylized lock or shield, rendered in a crisp vector style against a very dark navy background. The color palette emphasizes absolute digital sovereignty with subtle neon blue or vibrant violet accents, reflecting high-end cryptography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6MQK3LMd2a3fbRavTA9dA6wj4RdtSEO8eTFdYTyy9Oveh3rFGLObzKhmyMkQP7eEg78uZQ2LP4zTgSfqEHz_a8dddqWFqOfBHLVGDA08mehycsACj_rbOYh0lNw_i_hfc6XR8e84m2fp_dp7gDr7FOvLrWWMfORmgE8mUOIDZersVbX4hlf3DaldpbxHdS2-LibBsGFYAvcAfQGhdb8Bj9UM-hlDN_OCbb1-G8sf6VBLpQNp-hkqyAw"/>
+<span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary dark:text-primary-fixed-dim">CIPHER_VAULT</span>
+</div>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-100 p-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+<div class="mb-8">
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-2">Message History</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Review and manage your securely archived transmissions.</p>
+</div>
+<!-- History List (Stacked Layout for readability) -->
+<div class="space-y-4">
+<!-- Card 1 -->
+<div class="card-bg rounded-xl p-5 relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-colors" onclick="toggleActions('actions-1')">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface truncate">Project Archon Briefing</h3>
+</div>
+<span class="bg-secondary/10 text-secondary text-label-caps font-label-caps px-2 py-1 rounded-full border border-secondary/20">ENCRYPTED</span>
+</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant opacity-70 mb-4 truncate">
+                    0x8A7B...4F92 : AES-256-GCM : NONCE_VALID
+                </div>
+<div class="flex justify-between items-center text-body-sm font-body-sm text-outline">
+<span>Oct 24, 2023</span>
+<span>14:32 UTC</span>
+</div>
+<!-- Hidden Action Drawer -->
+<div class="hidden mt-4 pt-4 border-t border-outline-variant/30 flex justify-end gap-3 animate-fade-in" id="actions-1">
+<button class="bg-transparent border border-outline-variant text-on-surface hover:bg-surface-variant/50 px-4 py-2 rounded-lg text-body-sm font-body-sm font-medium transition-colors">
+                        Delete
+                    </button>
+<button class="bg-[#6366F1] text-white hover:shadow-[inset_0_0_10px_rgba(255,255,255,0.3)] px-5 py-2 rounded-lg text-body-sm font-body-sm font-medium flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+                        Decrypt
+                    </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="card-bg rounded-xl p-5 relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-colors" onclick="toggleActions('actions-2')">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface truncate">Financial Summaries Q3</h3>
+</div>
+<span class="bg-secondary/10 text-secondary text-label-caps font-label-caps px-2 py-1 rounded-full border border-secondary/20">ENCRYPTED</span>
+</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant opacity-70 mb-4 truncate">
+                    0x1C4D...9E2A : ChaCha20-Poly1305 : KEY_VERIFIED
+                </div>
+<div class="flex justify-between items-center text-body-sm font-body-sm text-outline">
+<span>Oct 22, 2023</span>
+<span>09:15 UTC</span>
+</div>
+<!-- Hidden Action Drawer -->
+<div class="hidden mt-4 pt-4 border-t border-outline-variant/30 flex justify-end gap-3 animate-fade-in" id="actions-2">
+<button class="bg-transparent border border-outline-variant text-on-surface hover:bg-surface-variant/50 px-4 py-2 rounded-lg text-body-sm font-body-sm font-medium transition-colors">
+                        Delete
+                    </button>
+<button class="bg-[#6366F1] text-white hover:shadow-[inset_0_0_10px_rgba(255,255,255,0.3)] px-5 py-2 rounded-lg text-body-sm font-body-sm font-medium flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+                        Decrypt
+                    </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="card-bg rounded-xl p-5 relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-colors" onclick="toggleActions('actions-3')">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface truncate">Personal Notes Log</h3>
+</div>
+<span class="bg-secondary/10 text-secondary text-label-caps font-label-caps px-2 py-1 rounded-full border border-secondary/20">ENCRYPTED</span>
+</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant opacity-70 mb-4 truncate">
+                    0x5F11...B3C8 : RSA-4096-OAEP : PGP_WRAPPED
+                </div>
+<div class="flex justify-between items-center text-body-sm font-body-sm text-outline">
+<span>Oct 18, 2023</span>
+<span>22:45 UTC</span>
+</div>
+<!-- Hidden Action Drawer -->
+<div class="hidden mt-4 pt-4 border-t border-outline-variant/30 flex justify-end gap-3 animate-fade-in" id="actions-3">
+<button class="bg-transparent border border-outline-variant text-on-surface hover:bg-surface-variant/50 px-4 py-2 rounded-lg text-body-sm font-body-sm font-medium transition-colors">
+                        Delete
+                    </button>
+<button class="bg-[#6366F1] text-white hover:shadow-[inset_0_0_10px_rgba(255,255,255,0.3)] px-5 py-2 rounded-lg text-body-sm font-body-sm font-medium flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+                        Decrypt
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface/90 dark:bg-surface-container/90 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant/30 shadow-lg md:hidden">
+<div class="flex justify-around items-center px-4 py-3 w-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="text-label-caps font-label-caps mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">lock</span>
+<span class="text-label-caps font-label-caps mt-1">Encrypt</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">lock_open</span>
+<span class="text-label-caps font-label-caps mt-1">Decrypt</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/20 dark:bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="text-label-caps font-label-caps mt-1">History</span>
+</a>
+</div>
+</nav>
+<!-- Global Actions Control Bar (Desktop Only) -->
+<div class="hidden md:flex fixed bottom-0 w-full active-modal border-t border-outline-variant/30 px-8 py-4 justify-between items-center z-40">
+<span class="font-code-sm text-code-sm text-on-surface-variant">SESSION: SECURE (ID: 9X-ALPHA)</span>
+<button class="bg-transparent border border-error/50 text-error hover:bg-error/10 px-4 py-2 rounded-lg text-body-sm font-body-sm font-medium transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete_forever</span>
+            Destroy Session
+        </button>
+</div>
+<script>
+        function toggleActions(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                // Close others
+                document.querySelectorAll('[id^="actions-"]').forEach(n => {
+                    if(n.id !== id) n.classList.add('hidden');
+                });
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+    </script>
+</body></html>

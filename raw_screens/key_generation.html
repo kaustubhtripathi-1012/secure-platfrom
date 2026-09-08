@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CipherVault - Key Generator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-variant": "#2d3449",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-container": "#ca8100",
+                    "on-primary-container": "#0d0096",
+                    "surface-container-lowest": "#060e20",
+                    "primary-container": "#8083ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-bright": "#31394d",
+                    "outline-variant": "#464554",
+                    "outline": "#908fa0",
+                    "inverse-surface": "#dae2fd",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "on-primary-fixed": "#07006c",
+                    "surface-container-high": "#222a3d",
+                    "primary-fixed": "#e1e0ff",
+                    "surface-tint": "#c0c1ff",
+                    "on-secondary-container": "#00311f",
+                    "on-secondary": "#003824",
+                    "secondary-container": "#00a572",
+                    "secondary": "#4edea3",
+                    "surface-container": "#171f33",
+                    "on-secondary-fixed": "#002113",
+                    "surface-dim": "#0b1326",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-background": "#dae2fd",
+                    "on-tertiary": "#472a00",
+                    "surface-container-highest": "#2d3449",
+                    "on-secondary-fixed-variant": "#005236",
+                    "tertiary": "#ffb95f",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-tertiary-container": "#3e2400",
+                    "on-surface": "#dae2fd",
+                    "inverse-on-surface": "#283044",
+                    "background": "#0b1326",
+                    "error": "#ffb4ab",
+                    "on-primary": "#1000a9",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-surface-variant": "#c7c4d7",
+                    "surface-container-low": "#131b2e",
+                    "surface": "#0b1326",
+                    "primary": "#c0c1ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "inverse-primary": "#494bd6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "container-max": "1280px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "body-sm": [
+                            "Inter", "sans-serif"
+                    ],
+                    "headline-md": [
+                            "Inter", "sans-serif"
+                    ],
+                    "code-md": [
+                            "JetBrains Mono", "monospace"
+                    ],
+                    "label-caps": [
+                            "Inter", "sans-serif"
+                    ],
+                    "code-sm": [
+                            "JetBrains Mono", "monospace"
+                    ],
+                    "headline-lg": [
+                            "Inter", "sans-serif"
+                    ],
+                    "headline-sm": [
+                            "Inter", "sans-serif"
+                    ],
+                    "body-lg": [
+                            "Inter", "sans-serif"
+                    ],
+                    "body-md": [
+                            "Inter", "sans-serif"
+                    ]
+            },
+            "fontSize": {
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "code-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "code-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+          font-family: 'Material Symbols Outlined';
+          font-weight: normal;
+          font-style: normal;
+          font-size: 24px;
+          line-height: 1;
+          letter-spacing: normal;
+          text-transform: none;
+          display: inline-block;
+          white-space: nowrap;
+          word-wrap: normal;
+          direction: ltr;
+          -webkit-font-feature-settings: 'liga';
+          -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Custom styles for the precise UI look */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(70, 69, 84, 0.5);
+        }
+        
+        .active-glow {
+            box-shadow: inset 0 0 10px rgba(99, 102, 241, 0.3);
+        }
+        
+        .input-focus-ring:focus-within {
+            border-color: #c0c1ff;
+            box-shadow: 0 0 0 2px rgba(192, 193, 255, 0.2);
+        }
+        
+        /* Progress bar animation */
+        @keyframes fillProgress {
+            from { width: 0; }
+            to { width: 85%; }
+        }
+        .animate-progress {
+            animation: fillProgress 1s ease-out forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24 font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant/50">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A macro photograph of an abstract cryptographic hash graphic, glowing with subtle neon purple and deep slate hues, set against a completely black technical background. The mood is high-security and futuristic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-I-FccW8gDDyHJuf2ls3m37mjv2-DXVnb-EySCeqXrdOdqZyjSGjzTJXFg0bR3IRFAq0ljQzkW3c8yfUOi-IekFWxIaFT3oyDAYVTm8ZeC7NqBARmnep1QSKFRS5drMYyAS0QTTr_nUosTzJuGhWIT8oOIaBsNlLBcNCIkXT21oDnmkILMKT-zDItOfu9h1dylLQ7BBZBcuRTz9w7UqBBVx_btBWkJMlX9OUbz4zBAuJHWY_bM0pE2g"/>
+</div>
+<span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary dark:text-primary-fixed-dim">CIPHER_VAULT</span>
+</div>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-100 p-2 rounded-full hover:bg-surface-variant/50 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="pt-24 px-margin-mobile max-w-container-max mx-auto flex flex-col gap-6">
+<!-- Page Header -->
+<section class="flex flex-col gap-2">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Key Generator</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Generate high-entropy cryptographic keys and salts for secure operations. Maximum security requires high randomness.</p>
+</section>
+<!-- Master Key Generator -->
+<section class="glass-panel rounded-xl p-5 flex flex-col gap-4 shadow-lg relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="key">key</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Master Key</h2>
+</div>
+<!-- Key Display -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 relative input-focus-ring transition-all group">
+<div class="font-code-md text-code-md text-secondary break-all pr-8 tracking-wider" id="generated-key">
+                    d7f8a9e2b4c6d5e1f0a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4
+                </div>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-variant active:scale-95">
+<span class="material-symbols-outlined text-[20px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+<!-- Entropy Meter -->
+<div class="flex flex-col gap-1 mt-2">
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Entropy Strength</span>
+<span class="font-label-caps text-label-caps text-secondary uppercase">Excellent</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full animate-progress"></div>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant opacity-70 mt-1">256 bits of entropy. Highly resistant to brute-force attacks.</p>
+</div>
+<!-- Configuration -->
+<div class="flex flex-col gap-3 mt-2 border-t border-outline-variant/30 pt-4">
+<label class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface">Key Length (Bits)</span>
+<select class="bg-surface-container border border-outline-variant rounded text-on-surface font-body-sm text-body-sm py-1 px-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option value="128">128 bit</option>
+<option selected="" value="256">256 bit</option>
+<option value="512">512 bit</option>
+</select>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary focus:ring-offset-background" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Include Special Characters</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary focus:ring-offset-background" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Include Numbers</span>
+</label>
+</div>
+<button class="mt-4 w-full bg-primary text-on-primary font-headline-md text-body-md py-3 rounded-lg hover:bg-primary-fixed-dim hover:active-glow transition-all active:scale-[0.98] flex items-center justify-center gap-2 font-semibold">
+<span class="material-symbols-outlined" data-icon="autorenew">autorenew</span>
+                Generate New Key
+            </button>
+</section>
+<!-- Salt Generator -->
+<section class="glass-panel rounded-xl p-5 flex flex-col gap-4 shadow-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="scatter_plot">scatter_plot</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Cryptographic Salt</h2>
+</div>
+<!-- Salt Display -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 relative input-focus-ring transition-all group flex items-center justify-between">
+<div class="font-code-md text-code-md text-tertiary break-all pr-4 tracking-wide" id="generated-salt">
+                    $2a$12$N9Zq/J1q...
+                </div>
+<button class="text-on-surface-variant hover:text-tertiary transition-colors p-2 rounded-full hover:bg-surface-variant active:scale-95 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-high/50 p-2 rounded border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="info">info</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Use unique salts per entry to defend against rainbow table attacks.</p>
+</div>
+<!-- Configuration & Action -->
+<div class="flex flex-col gap-4 mt-2">
+<div class="grid grid-cols-3 gap-2">
+<label class="cursor-pointer relative">
+<input class="peer sr-only" name="salt_length" type="radio" value="short"/>
+<div class="text-center py-2 px-1 rounded-md border border-outline-variant bg-surface-container text-on-surface-variant peer-checked:bg-surface-variant peer-checked:border-tertiary peer-checked:text-tertiary transition-colors font-body-sm text-[13px]">Short</div>
+</label>
+<label class="cursor-pointer relative">
+<input checked="" class="peer sr-only" name="salt_length" type="radio" value="medium"/>
+<div class="text-center py-2 px-1 rounded-md border border-outline-variant bg-surface-container text-on-surface-variant peer-checked:bg-surface-variant peer-checked:border-tertiary peer-checked:text-tertiary transition-colors font-body-sm text-[13px]">Medium</div>
+</label>
+<label class="cursor-pointer relative">
+<input class="peer sr-only" name="salt_length" type="radio" value="long"/>
+<div class="text-center py-2 px-1 rounded-md border border-outline-variant bg-surface-container text-on-surface-variant peer-checked:bg-surface-variant peer-checked:border-tertiary peer-checked:text-tertiary transition-colors font-body-sm text-[13px]">Long</div>
+</label>
+</div>
+<button class="w-full bg-surface-variant text-on-surface border border-outline-variant font-headline-md text-body-md py-3 rounded-lg hover:bg-surface-bright transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="cycle">cycle</span>
+                    Generate Salt
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface/90 dark:bg-surface-container/90 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant/30 shadow-lg fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 p-1 rounded-lg">
+<span class="material-symbols-outlined mb-1 text-primary dark:text-primary-fixed-dim" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-[10px] text-primary dark:text-primary-fixed-dim">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center flex flex-col items-center justify-center bg-primary-container/20 dark:bg-primary-container text-on-primary-container rounded-full px-4 py-1 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined mb-1 text-primary dark:text-primary-fixed-dim" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label-caps text-[10px] text-primary dark:text-primary-fixed-dim">Encrypt</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 p-1 rounded-lg">
+<span class="material-symbols-outlined mb-1 text-primary dark:text-primary-fixed-dim" data-icon="lock_open">lock_open</span>
+<span class="font-label-caps text-[10px] text-primary dark:text-primary-fixed-dim">Decrypt</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 p-1 rounded-lg">
+<span class="material-symbols-outlined mb-1 text-primary dark:text-primary-fixed-dim" data-icon="history">history</span>
+<span class="font-label-caps text-[10px] text-primary dark:text-primary-fixed-dim">History</span>
+</button>
+</nav>
+<script>
+        // Simple visual feedback for copy buttons
+        document.querySelectorAll('button:has([data-icon="content_copy"])').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('span');
+                const originalText = icon.textContent;
+                icon.textContent = 'check';
+                icon.classList.add('text-secondary');
+                
+                setTimeout(() => {
+                    icon.textContent = originalText;
+                    icon.classList.remove('text-secondary');
+                }, 1500);
+            });
+        });
+    </script>
+</body></html>

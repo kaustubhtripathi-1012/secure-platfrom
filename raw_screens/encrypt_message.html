@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CIPHER_VAULT - Encrypt</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-on-surface": "#283044",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-tint": "#c0c1ff",
+                        "on-surface-variant": "#c7c4d7",
+                        "outline": "#908fa0",
+                        "outline-variant": "#464554",
+                        "tertiary-container": "#ca8100",
+                        "on-tertiary-container": "#3e2400",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#4edea3",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-container-lowest": "#060e20",
+                        "on-error": "#690005",
+                        "surface-bright": "#31394d",
+                        "surface-container-highest": "#2d3449",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-container": "#00a572",
+                        "secondary": "#4edea3",
+                        "on-secondary-container": "#00311f",
+                        "on-primary-container": "#0d0096",
+                        "on-primary": "#1000a9",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-background": "#dae2fd",
+                        "on-primary-fixed": "#07006c",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#93000a",
+                        "surface-container": "#171f33",
+                        "surface-container-high": "#222a3d",
+                        "on-secondary": "#003824",
+                        "surface-variant": "#2d3449",
+                        "on-tertiary": "#472a00",
+                        "tertiary": "#ffb95f",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container-low": "#131b2e",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface": "#dae2fd",
+                        "primary": "#c0c1ff",
+                        "background": "#0b1326",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-container": "#8083ff",
+                        "surface": "#0b1326",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-dim": "#0b1326",
+                        "inverse-primary": "#494bd6",
+                        "inverse-surface": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "code-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        .glow-active {
+            box-shadow: inset 0 0 10px rgba(192, 193, 255, 0.5), 0 0 15px rgba(192, 193, 255, 0.2);
+        }
+        .input-focus-ring:focus-within {
+            border-color: #c0c1ff;
+            box-shadow: 0 0 0 2px rgba(192, 193, 255, 0.2);
+        }
+        
+        /* Shimmer Animation for processing state */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .processing-shimmer {
+            background: linear-gradient(90deg, rgba(45, 52, 73, 0) 0%, rgba(192, 193, 255, 0.1) 50%, rgba(45, 52, 73, 0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        /* Hide success state initially */
+        #success-state {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden pt-16 pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant/50">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, dark metallic user avatar placeholder, featuring subtle glowing blue circuitry lines reflecting on its surface, set against a completely black background with high-contrast studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8t_ikY6Xu9mRJcy3WkHiCgg5JvD5ffGcqv_2IQ6vSbJCO4xJVZGJbwpojnH8ln61spGbzwA1X8EcPR0V8B5p_dlfBeBb_RYpcfK7nNmgYP0TGY_FRLXzWUXaLbakLCXburIADmTLGanVHYz7Zp-LHk_8VeYUpK7vw9bkBRtqc6hU4XAfOKKQODp1LgVQBEDZJ7pUTyI1uC3e4_m2kos9XM7PjJhac1iYQmnD4vuR-rJxjJLbOqUZSjA"/>
+</div>
+<span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary dark:text-primary-fixed-dim">CIPHER_VAULT</span>
+</div>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-100 flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-variant/50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow container mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop py-8 flex flex-col items-center">
+<!-- Encryption Work Area -->
+<div class="w-full max-w-3xl glass-panel rounded-xl shadow-lg relative overflow-hidden">
+<!-- Default Input State -->
+<div class="p-6 md:p-8 flex flex-col gap-6" id="input-state">
+<div class="flex items-center justify-between mb-2">
+<h1 class="text-headline-md font-headline-md text-primary-fixed-dim flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed-dim">enhanced_encryption</span>
+                        Secure Encryption
+                    </h1>
+<div class="px-3 py-1 rounded-full bg-surface-variant text-label-caps font-label-caps text-on-surface-variant flex items-center gap-1 border border-outline-variant/30">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+                        UNSECURED
+                    </div>
+</div>
+<!-- Plain Text Area -->
+<div class="flex flex-col gap-2">
+<label class="text-label-caps font-label-caps text-on-surface-variant flex justify-between" for="plaintext">
+<span>PLAIN TEXT MESSAGE</span>
+<span class="text-outline">0 / 4096</span>
+</label>
+<div class="relative input-focus-ring rounded-lg border border-outline-variant/50 bg-surface-container-lowest transition-all">
+<textarea class="w-full bg-transparent border-none text-body-md font-body-md text-on-surface p-4 focus:ring-0 resize-y min-h-[120px]" id="plaintext" placeholder="Enter sensitive data to encrypt..." rows="6"></textarea>
+<div class="absolute bottom-2 right-2 flex gap-2">
+<button class="p-1.5 rounded-md hover:bg-surface-variant text-on-surface-variant transition-colors" title="Clear">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Password & Key Generation -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-label-caps font-label-caps text-on-surface-variant" for="password">ENCRYPTION PASSWORD</label>
+<div class="relative input-focus-ring rounded-lg border border-outline-variant/50 bg-surface-container-lowest transition-all flex items-center">
+<span class="material-symbols-outlined text-outline ml-3 absolute">key</span>
+<input class="w-full bg-transparent border-none text-code-md font-code-md text-on-surface py-3 pl-10 pr-10 focus:ring-0 tracking-widest" id="password" placeholder="••••••••••••" type="password"/>
+<button class="absolute right-3 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+<!-- Strength Meter -->
+<div class="flex gap-1 mt-1">
+<div class="h-1 flex-1 bg-secondary rounded-full opacity-20"></div>
+<div class="h-1 flex-1 bg-secondary rounded-full opacity-20"></div>
+<div class="h-1 flex-1 bg-secondary rounded-full opacity-20"></div>
+<div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-caps font-label-caps text-on-surface-variant">CRYPTOGRAPHIC SALT (OPTIONAL)</label>
+<div class="flex gap-2">
+<div class="relative input-focus-ring rounded-lg border border-outline-variant/50 bg-surface-container-lowest transition-all flex items-center flex-grow">
+<input class="w-full bg-transparent border-none text-code-sm font-code-sm text-outline py-3 px-3 focus:ring-0 opacity-50 uppercase tracking-widest" id="salt-key" placeholder="AUTO-GENERATED" readonly="" type="text"/>
+</div>
+<button class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-variant hover:bg-surface-container-high text-body-sm font-body-sm text-on-surface transition-colors flex items-center justify-center gap-2" id="btn-generate-key">
+<span class="material-symbols-outlined text-[18px]">autorenew</span>
+                                Gen
+                            </button>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="mt-4 pt-6 border-t border-outline-variant/30 flex justify-end">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg text-body-md font-headline-sm font-semibold flex items-center gap-2 hover:bg-primary-fixed transition-all active:scale-95 glow-active w-full md:w-auto justify-center shadow-[0_0_15px_rgba(192,193,255,0.15)]" id="btn-encrypt">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        Securely Encrypt
+                    </button>
+</div>
+</div>
+<!-- Processing Overlay (Hidden by default, shown during transition) -->
+<div class="absolute inset-0 bg-surface/90 backdrop-blur-sm z-10 hidden flex-col items-center justify-center gap-4" id="processing-overlay">
+<span class="material-symbols-outlined text-[48px] text-primary animate-spin">sync</span>
+<span class="text-body-lg font-code-md text-primary tracking-widest uppercase animate-pulse">Encrypting Payload...</span>
+</div>
+<!-- Success State -->
+<div class="p-6 md:p-8 flex flex-col gap-6 h-full" id="success-state">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-headline-md font-headline-md text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Encryption Successful
+                    </h2>
+<div class="px-3 py-1 rounded-full bg-secondary/10 text-label-caps font-label-caps text-secondary flex items-center gap-1 border border-secondary/30">
+<div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+                        SECURED
+                    </div>
+</div>
+<div class="flex flex-col gap-2 flex-grow">
+<label class="text-label-caps font-label-caps text-on-surface-variant">CIPHERTEXT OUTPUT (AES-256-GCM)</label>
+<div class="relative rounded-lg border border-secondary/30 bg-surface-container-lowest p-4 flex-grow min-h-[200px] flex flex-col group overflow-hidden">
+<!-- Shimmer effect overlay -->
+<div class="absolute inset-0 processing-shimmer pointer-events-none opacity-20"></div>
+<div class="overflow-y-auto pr-2 custom-scrollbar text-secondary opacity-80 break-all" id="encrypted-output">
+<code class="text-code-sm font-code-sm leading-relaxed tracking-wider">
+                                U2FsdGVkX1+vYwA9/xH5y8zZ4uQwJqL...
+                            </code>
+</div>
+<div class="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 rounded-md bg-surface-variant hover:bg-surface-container-high text-on-surface border border-outline-variant/50 transition-colors shadow-lg backdrop-blur-md flex items-center gap-1" title="Copy to Clipboard">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span class="text-label-caps font-label-caps hidden md:inline">COPY</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-6 border-t border-outline-variant/30 flex justify-between items-center">
+<button class="text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1" id="btn-reset">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+                        Start Over
+                    </button>
+<div class="flex gap-3">
+<button class="px-4 py-2 rounded-lg border border-outline-variant bg-transparent hover:bg-surface-variant text-body-sm font-body-sm text-on-surface transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Export
+                        </button>
+<button class="px-4 py-2 rounded-lg bg-surface-variant text-error hover:bg-error/20 border border-error/30 text-body-sm font-body-sm transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete_forever</span>
+                             Destroy
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Subtle explanatory text below -->
+<p class="mt-8 text-body-sm font-body-sm text-on-surface-variant/60 max-w-xl text-center">
+            All encryption happens locally in your browser. Keys and plain text are never sent to external servers. Ensure you securely store your password.
+        </p>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant/30 shadow-lg bg-surface/90 dark:bg-surface-container/90 backdrop-blur-xl flex justify-around items-center px-4 py-3 pb-[max(env(safe-area-inset-bottom),12px)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 rounded-lg p-2 min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="text-label-caps font-label-caps">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/20 dark:bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-200 min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="text-label-caps font-label-caps">Encrypt</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 rounded-lg p-2 min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1">lock_open</span>
+<span class="text-label-caps font-label-caps">Decrypt</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 rounded-lg p-2 min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="text-label-caps font-label-caps">History</span>
+</a>
+</nav>
+<!-- Global Nav for Desktop (Hidden on mobile) -->
+<nav class="hidden md:flex fixed left-0 top-16 h-[calc(100vh-64px)] w-20 flex-col items-center py-8 gap-8 bg-surface-container-lowest/50 border-r border-outline-variant/30 z-40 backdrop-blur-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors p-3 rounded-xl hover:bg-surface-variant/50 group relative" href="#" title="Dashboard">
+<span class="material-symbols-outlined text-[28px]">dashboard</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-label-caps font-label-caps rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Dashboard</span>
+</a>
+<a class="text-primary bg-primary-container/20 p-3 rounded-xl relative group" href="#" title="Encrypt">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-label-caps font-label-caps rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Encrypt</span>
+<!-- Active indicator line -->
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full -ml-3"></div>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors p-3 rounded-xl hover:bg-surface-variant/50 group relative" href="#" title="Decrypt">
+<span class="material-symbols-outlined text-[28px]">lock_open</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-label-caps font-label-caps rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">Decrypt</span>
+</a>
+<div class="flex-grow"></div>
+<a class="text-on-surface-variant hover:text-primary transition-colors p-3 rounded-xl hover:bg-surface-variant/50 group relative" href="#" title="History">
+<span class="material-symbols-outlined text-[28px]">history</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-label-caps font-label-caps rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">History</span>
+</a>
+</nav>
+<!-- Custom Scrollbar Styling -->
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(70, 69, 84, 0.5);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(144, 143, 160, 0.8);
+        }
+    </style>
+<script>
+        // Simple interactions for prototype feel
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnGenerate = document.getElementById('btn-generate-key');
+            const saltInput = document.getElementById('salt-key');
+            const btnEncrypt = document.getElementById('btn-encrypt');
+            const inputState = document.getElementById('input-state');
+            const successState = document.getElementById('success-state');
+            const overlay = document.getElementById('processing-overlay');
+            const btnReset = document.getElementById('btn-reset');
+            const outputArea = document.getElementById('encrypted-output');
+
+            // Generate mock key
+            btnGenerate.addEventListener('click', () => {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let key = 'AE5-';
+                for(let i=0; i<8; i++) key += chars.charAt(Math.floor(Math.random() * chars.length));
+                saltInput.value = key;
+                saltInput.classList.remove('opacity-50');
+                saltInput.classList.add('text-primary-fixed-dim');
+            });
+
+            // Simulate Encryption Process
+            btnEncrypt.addEventListener('click', () => {
+                // Show overlay
+                overlay.style.display = 'flex';
+                
+                // Simulate processing time
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    inputState.style.display = 'none';
+                    successState.style.display = 'flex';
+                    
+                    // Generate some fake ciphertext for visual effect
+                    const fakeHex = Array.from({length: 400}, () => Math.floor(Math.random()*16).toString(16)).join('');
+                    const formattedHex = fakeHex.match(/.{1,32}/g).join('<br>').toUpperCase();
+                    outputArea.innerHTML = `<code class="text-code-sm font-code-sm leading-relaxed tracking-widest break-all select-all">${formattedHex}</code>`;
+
+                }, 1500);
+            });
+
+            // Reset
+            btnReset.addEventListener('click', () => {
+                successState.style.display = 'none';
+                inputState.style.display = 'flex';
+                document.getElementById('plaintext').value = '';
+                document.getElementById('password').value = '';
+            });
+        });
+    </script>
+</body></html>
