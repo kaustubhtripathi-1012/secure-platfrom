@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CipherVault - Security Settings</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed": "#07006c",
+                        "error-container": "#93000a",
+                        "outline": "#908fa0",
+                        "inverse-on-surface": "#283044",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#2d3449",
+                        "primary-fixed": "#e1e0ff",
+                        "primary-container": "#8083ff",
+                        "tertiary": "#ffb95f",
+                        "surface-container-low": "#131b2e",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-primary": "#494bd6",
+                        "surface-tint": "#c0c1ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-container-highest": "#2d3449",
+                        "tertiary-container": "#ca8100",
+                        "on-surface": "#dae2fd",
+                        "on-tertiary-container": "#3e2400",
+                        "surface-container-lowest": "#060e20",
+                        "surface-container-high": "#222a3d",
+                        "outline-variant": "#464554",
+                        "on-secondary-fixed": "#002113",
+                        "surface-bright": "#31394d",
+                        "surface-dim": "#0b1326",
+                        "surface-container": "#171f33",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "secondary-container": "#00a572",
+                        "on-secondary-container": "#00311f",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-error-container": "#ffdad6",
+                        "on-surface-variant": "#c7c4d7",
+                        "background": "#0b1326",
+                        "on-error": "#690005",
+                        "surface": "#0b1326",
+                        "inverse-surface": "#dae2fd",
+                        "on-background": "#dae2fd",
+                        "secondary": "#4edea3",
+                        "on-tertiary": "#472a00",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-secondary": "#003824",
+                        "primary": "#c0c1ff",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#0d0096",
+                        "on-primary": "#1000a9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "code-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(23, 31, 51, 0.6) 0%, rgba(11, 19, 38, 0.8) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .glow-border {
+            box-shadow: inset 0 0 0 1px rgba(192, 193, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md antialiased selection:bg-primary/30 selection:text-primary">
+<!-- Atmospheric Background -->
+<div class="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-surface-container-high/30 via-background to-background"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center w-full px-margin-mobile h-16">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant/50 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A highly detailed macro render of a futuristic, dark cryptographic microchip emitting a very faint, precise purple neon glow. The texture is sleek, matte obsidian, representing a secure digital user identity in a high-tech corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjDqkr5AGFuLjgOI_3C8lFnxGGHhOmyb5vX7sLzgOl7mAlMXKvlp6u4lKaz83dE4bjbJ7QiIfk4pPvOJSeqA1oBmQapnGFtlXnJrDC4Rv8eH7nQkFi8_dfb4EtNsjQNHKa7fUnMNaH8NomrA4qmgNr81HAdc3yt1qcgJOZ8bh3YVDZlhMGlRmfOEPRFhYhoA5y02En0hXwaMbMROpg9LO24YY_OVA9C7XtLLYLWXlnvXBJGFtTiyN2Fw"/>
+</div>
+<span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary dark:text-primary-fixed-dim">CIPHER_VAULT</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:opacity-80 transition-opacity active:scale-95 duration-100 text-on-surface-variant dark:text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto w-full space-y-8">
+<header>
+<h1 class="text-headline-lg font-headline-lg text-on-background mb-2">Security Settings</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Manage your vault's cryptographic preferences and access controls.</p>
+</header>
+<!-- Profile Section -->
+<section class="glass-panel border border-outline-variant/30 rounded-xl p-6 flex items-center gap-6 relative overflow-hidden glow-border">
+<div class="absolute -top-12 -right-12 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest overflow-hidden border-2 border-outline-variant/50 shrink-0 shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A highly detailed macro render of a futuristic, dark cryptographic microchip emitting a very faint, precise purple neon glow. The texture is sleek, matte obsidian, representing a secure digital user identity in a high-tech corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnoD3cELU4Nxvo4rmyE0W6T5BH3FKsOpvfFQ6l3-12gzO_H_NotvcgmWB3oiIup99PV9ohZapOBe34vhB3ebD2CUJe1d5iBEjSjr9kx9oyDdn6ymb9g9esKJOXJAIwJ3QmgpIvqGUHGaoRqLCejs0riFkkfbf4KthxXLFCMuFFNyyz773f1v5JGeMKlOOZcxNhWr7tHKIX0947kfvs8IjjtpZ1fsbZaDckLetd-1ZvW1A5jBJrLMnzJQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 mb-1">
+<div class="text-label-caps font-label-caps text-primary tracking-widest uppercase">VAULT_ID: <span class="font-code-sm text-code-sm ml-1 text-on-background/80">0x8A9F...E2C4</span></div>
+</div>
+<div class="text-headline-sm font-headline-sm text-on-background mb-1">System Administrator</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(78,222,163,0.6)]"></span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Tier 3 Clearance Active</span>
+</div>
+</div>
+</section>
+<!-- Prominent 2FA Status Card -->
+<section class="bg-surface-dim border border-error/20 rounded-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-error rounded-l-xl"></div>
+<div class="absolute top-0 right-0 w-64 h-64 bg-error/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+<div class="max-w-md">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<h2 class="text-headline-md font-headline-md text-on-background">Two-Factor Authentication</h2>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant">Strengthen your vault's perimeter. Highly recommended for accounts with Tier 2 clearance or above to prevent unauthorized decryption attempts.</p>
+</div>
+<div class="flex flex-col items-start md:items-end gap-4 shrink-0">
+<div class="bg-error-container/20 text-error px-4 py-1.5 rounded-full text-label-caps font-label-caps border border-error/20 inline-flex items-center gap-2 shadow-[inset_0_0_8px_rgba(147,0,10,0.2)]">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                        Not Configured
+                    </div>
+<button class="w-full md:w-auto bg-primary text-on-primary font-label-caps text-label-caps px-6 py-3 rounded-lg hover:shadow-[inset_0_0_12px_rgba(255,255,255,0.3)] hover:opacity-90 active:scale-95 transition-all duration-200 shadow-md">
+                        Setup 2FA
+                    </button>
+</div>
+</div>
+</section>
+<!-- Hardware & Local Controls (Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Biometric Toggle (Active) -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-5 flex items-center justify-between hover:bg-surface-container transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant/20 flex items-center justify-center group-hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary">fingerprint</span>
+</div>
+<div>
+<div class="text-body-md font-body-md text-on-background font-medium mb-0.5">Biometric Unlock</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">Require hardware validation</div>
+</div>
+</div>
+<button aria-pressed="true" class="w-12 h-6 rounded-full bg-primary relative transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]">
+<div class="absolute right-1 top-1 w-4 h-4 rounded-full bg-on-primary shadow-sm transition-transform duration-200"></div>
+</button>
+</div>
+<!-- Local Storage Toggle (Inactive) -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-5 flex items-center justify-between hover:bg-surface-container transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant/20 flex items-center justify-center group-hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">save</span>
+</div>
+<div>
+<div class="text-body-md font-body-md text-on-background font-medium mb-0.5">Local Storage Only</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">Disable encrypted cloud sync</div>
+</div>
+</div>
+<button aria-pressed="false" class="w-12 h-6 rounded-full bg-surface-container-highest border border-outline-variant/50 relative transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-outline/50 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]">
+<div class="absolute left-1 top-1 w-4 h-4 rounded-full bg-on-surface-variant shadow-sm transition-transform duration-200"></div>
+</button>
+</div>
+</section>
+<!-- Advanced Configuration List -->
+<section class="bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm">
+<h3 class="text-label-caps font-label-caps text-on-surface-variant px-6 py-4 border-b border-outline-variant/20 tracking-wider bg-surface-container/30">ADVANCED PROTOCOLS</h3>
+<div class="divide-y divide-outline-variant/20">
+<button class="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-variant/40 transition-colors group text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">key</span>
+<div>
+<div class="text-body-md font-body-md text-on-background group-hover:text-primary-fixed-dim transition-colors">Master Key Management</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Rotate or export core cryptographic keys</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all">chevron_right</span>
+</button>
+<button class="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-variant/40 transition-colors group text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">tune</span>
+<div>
+<div class="text-body-md font-body-md text-on-background group-hover:text-primary-fixed-dim transition-colors">Authentication Preferences</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Manage backup codes and recovery phrases</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all">chevron_right</span>
+</button>
+<button class="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-variant/40 transition-colors group text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">timer</span>
+<div>
+<div class="text-body-md font-body-md text-on-background group-hover:text-primary-fixed-dim transition-colors">Session Timeout</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Auto-lock vault after inactivity</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-label-caps font-label-caps text-primary bg-primary/10 px-2 py-1 rounded">15 MIN</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all">chevron_right</span>
+</div>
+</button>
+<button class="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-variant/40 transition-colors group text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">visibility_off</span>
+<div>
+<div class="text-body-md font-body-md text-on-background group-hover:text-primary-fixed-dim transition-colors">Data Privacy</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Telemetry and error reporting controls</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all">chevron_right</span>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<!-- Note: Semantic intent dictates this is a deep settings page, so no primary nav item is highlighted as active. -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/90 dark:bg-surface-container/90 backdrop-blur-xl rounded-t-xl border-t border-outline-variant/30 shadow-lg pb-[env(safe-area-inset-bottom)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 py-1 px-4 rounded-xl">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="text-label-caps font-label-caps">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 py-1 px-4 rounded-xl">
+<span class="material-symbols-outlined mb-1">lock</span>
+<span class="text-label-caps font-label-caps">Encrypt</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 py-1 px-4 rounded-xl">
+<span class="material-symbols-outlined mb-1">lock_open</span>
+<span class="text-label-caps font-label-caps">Decrypt</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 py-1 px-4 rounded-xl">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="text-label-caps font-label-caps">History</span>
+</button>
+</nav>
+</body></html>

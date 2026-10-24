@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cipher Vault - Database Export</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config from Guidelines -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-primary-fixed": "#07006c",
+                    "error-container": "#93000a",
+                    "outline": "#908fa0",
+                    "inverse-on-surface": "#283044",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface-variant": "#2d3449",
+                    "primary-fixed": "#e1e0ff",
+                    "primary-container": "#8083ff",
+                    "tertiary": "#ffb95f",
+                    "surface-container-low": "#131b2e",
+                    "tertiary-fixed": "#ffddb8",
+                    "inverse-primary": "#494bd6",
+                    "surface-tint": "#c0c1ff",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "surface-container-highest": "#2d3449",
+                    "tertiary-container": "#ca8100",
+                    "on-surface": "#dae2fd",
+                    "on-tertiary-container": "#3e2400",
+                    "surface-container-lowest": "#060e20",
+                    "surface-container-high": "#222a3d",
+                    "outline-variant": "#464554",
+                    "on-secondary-fixed": "#002113",
+                    "surface-bright": "#31394d",
+                    "surface-dim": "#0b1326",
+                    "surface-container": "#171f33",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "secondary-container": "#00a572",
+                    "on-secondary-container": "#00311f",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-error-container": "#ffdad6",
+                    "on-surface-variant": "#c7c4d7",
+                    "background": "#0b1326",
+                    "on-error": "#690005",
+                    "surface": "#0b1326",
+                    "inverse-surface": "#dae2fd",
+                    "on-background": "#dae2fd",
+                    "secondary": "#4edea3",
+                    "on-tertiary": "#472a00",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-secondary": "#003824",
+                    "primary": "#c0c1ff",
+                    "error": "#ffb4ab",
+                    "on-primary-container": "#0d0096",
+                    "on-primary": "#1000a9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max": "1280px",
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "code-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "code-md": ["JetBrains Mono"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Subtle grid background for the technical feel */
+        .bg-grid-pattern {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(70, 69, 84, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(70, 69, 84, 0.1) 1px, transparent 1px);
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b1326; }
+        ::-webkit-scrollbar-thumb { background: #2d3449; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #464554; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased bg-grid-pattern relative">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant/50">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant" data-icon="person">person</span>
+</div>
+<span class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary dark:text-primary-fixed-dim">CIPHER_VAULT</span>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-variant/50 transition-colors text-on-surface-variant active:scale-95 duration-100 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 px-margin-mobile md:px-margin-desktop flex justify-center w-full relative z-10">
+<div class="w-full max-w-[720px] flex flex-col gap-8">
+<!-- Header Section -->
+<div class="flex flex-col gap-2">
+<h1 class="font-headline-lg text-headline-lg text-on-background">Secure Data Export</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Generate an encrypted archive of your vault contents for offline cold storage or migration.</p>
+</div>
+<!-- Stats Bento Card -->
+<div class="bg-surface-container/60 backdrop-blur-md border border-outline-variant/30 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between shadow-sm relative overflow-hidden group">
+<div class="absolute -top-16 -right-16 w-48 h-48 bg-primary-container/10 rounded-full blur-3xl group-hover:bg-primary-container/20 transition-all duration-700 pointer-events-none"></div>
+<div class="flex items-center gap-4 relative z-10 mb-4 sm:mb-0">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center border border-outline-variant/50 shadow-inner">
+<span class="material-symbols-outlined text-primary" data-icon="database">database</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Current Vault</h3>
+<p class="font-code-sm text-code-sm text-on-surface-variant mt-1">Status: Indexed &amp; Ready</p>
+</div>
+</div>
+<div class="sm:text-right relative z-10 bg-surface-container-lowest/50 p-3 rounded-lg border border-outline-variant/20 inline-flex sm:flex flex-col gap-1">
+<div class="flex justify-between sm:justify-end gap-6 items-baseline">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Records</span>
+<span class="font-code-md text-code-md text-secondary font-bold">156</span>
+</div>
+<div class="flex justify-between sm:justify-end gap-6 items-baseline">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Volume</span>
+<span class="font-code-md text-code-md text-primary-fixed-dim font-bold">2.4 MB</span>
+</div>
+</div>
+</div>
+<!-- Configuration Form -->
+<form class="flex flex-col gap-8" onsubmit="event.preventDefault();">
+<!-- Format Selection -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<label class="font-label-caps text-label-caps text-on-surface-variant tracking-widest">Export Protocol</label>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="format-selection">
+<!-- Option 1: Encrypted SQL -->
+<label class="relative flex flex-col p-4 rounded-xl border-2 border-primary bg-primary/5 cursor-pointer hover:bg-primary/10 transition-all radio-card group">
+<input checked="" class="sr-only" name="format" onchange="updateRadioSelection(this)" type="radio" value="sql"/>
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="lock_clock">lock_clock</span>
+<div class="w-5 h-5 rounded-full border-2 border-primary bg-primary flex items-center justify-center radio-indicator transition-colors">
+<div class="w-2 h-2 rounded-full bg-background indicator-inner"></div>
+</div>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mb-1">Encrypted SQL</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Preserves relational integrity.</span>
+</label>
+<!-- Option 2: JSON -->
+<label class="relative flex flex-col p-4 rounded-xl border border-outline-variant/50 bg-surface-container hover:bg-surface-container-highest cursor-pointer transition-all radio-card group">
+<input class="sr-only" name="format" onchange="updateRadioSelection(this)" type="radio" value="json"/>
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed-dim transition-colors" data-icon="data_object">data_object</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant radio-indicator transition-colors"></div>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mb-1">JSON Data</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Highly portable structure.</span>
+</label>
+<!-- Option 3: CSV -->
+<label class="relative flex flex-col p-4 rounded-xl border border-outline-variant/50 bg-surface-container hover:bg-surface-container-highest cursor-pointer transition-all radio-card group">
+<input class="sr-only" name="format" onchange="updateRadioSelection(this)" type="radio" value="csv"/>
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed-dim transition-colors" data-icon="table">table</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant radio-indicator transition-colors"></div>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mb-1">Raw CSV</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Spreadsheet compatible.</span>
+</label>
+</div>
+</div>
+<!-- Security Warning -->
+<div class="bg-error-container/10 border border-error-container/30 rounded-xl p-5 flex gap-4 items-start shadow-sm">
+<div class="w-10 h-10 rounded-full bg-error-container/20 flex shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+</div>
+<div class="flex flex-col gap-1 pt-1">
+<h4 class="font-headline-sm text-headline-sm text-error">Physical Vault Recommended</h4>
+<p class="font-body-sm text-body-sm text-on-error-container/90">
+                            The resulting archive contains sensitive data. It should be immediately transferred to a hardware token or physical vault. Do not leave the backup file on network-connected storage devices.
+                        </p>
+</div>
+</div>
+<!-- Passphrase Field -->
+<div class="flex flex-col gap-3">
+<label class="font-label-caps text-label-caps text-on-surface-variant tracking-widest" for="export_passphrase">Nested Archive Encryption Key</label>
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/5 rounded-xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none"></div>
+<input class="relative w-full bg-surface-container-lowest border border-outline-variant/50 rounded-xl px-4 py-4 pl-12 font-code-md text-code-md text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-inner" id="export_passphrase" oninput="updateStrength(this.value)" placeholder="Define a strong passphrase..." type="password"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary transition-colors z-10" data-icon="key">key</span>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface transition-colors z-10 focus:outline-none focus:text-primary" onclick="togglePassword()" title="Toggle visibility" type="button">
+<span class="material-symbols-outlined" data-icon="visibility_off" id="visibility_icon">visibility_off</span>
+</button>
+</div>
+<!-- Strength meter -->
+<div class="flex flex-col gap-2 mt-1">
+<div class="flex gap-1 h-1.5 w-full">
+<div class="flex-1 bg-surface-variant rounded-l-full transition-colors duration-300" id="strength-1"></div>
+<div class="flex-1 bg-surface-variant transition-colors duration-300" id="strength-2"></div>
+<div class="flex-1 bg-surface-variant transition-colors duration-300" id="strength-3"></div>
+<div class="flex-1 bg-surface-variant rounded-r-full transition-colors duration-300" id="strength-4"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Minimum 16 characters required.</span>
+<span class="font-code-sm text-code-sm text-outline-variant" id="strength-text">Awaiting input</span>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="pt-4">
+<button class="w-full bg-inverse-primary hover:bg-inverse-primary/90 text-surface-container-lowest font-headline-sm text-headline-sm py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] shadow-lg shadow-inverse-primary/20 group overflow-hidden relative" type="button">
+<!-- button shimmer effect -->
+<div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
+<span class="material-symbols-outlined relative z-10" data-icon="download">download</span>
+<span class="relative z-10">Generate &amp; Download Backup</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/90 dark:bg-surface-container/90 backdrop-blur-xl rounded-t-xl border-t border-outline-variant/30 shadow-lg">
+<!-- Active: Dashboard -->
+<button class="flex flex-col items-center justify-center bg-primary-container/20 dark:bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-200 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-caps font-label-caps mt-1">Dashboard</span>
+</button>
+<!-- Inactive: Encrypt -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+<span class="text-label-caps font-label-caps mt-1">Encrypt</span>
+</button>
+<!-- Inactive: Decrypt -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" data-icon="lock_open">lock_open</span>
+<span class="text-label-caps font-label-caps mt-1">Decrypt</span>
+</button>
+<!-- Inactive: History -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-label-caps font-label-caps mt-1">History</span>
+</button>
+</nav>
+<!-- Interactive Scripts -->
+<script>
+        // Custom keyframes for shimmer
+        tailwind.config.theme.extend.keyframes = {
+            shimmer: {
+                '100%': { transform: 'translateX(100%)' }
+            }
+        };
+
+        // Radio button logic for visual styling
+        function updateRadioSelection(selectedInput) {
+            const cards = document.querySelectorAll('.radio-card');
+            cards.forEach(card => {
+                // Reset styles
+                card.classList.remove('border-primary', 'bg-primary/5', 'border-2');
+                card.classList.add('border-outline-variant/50', 'bg-surface-container', 'border');
+                
+                const indicator = card.querySelector('.radio-indicator');
+                indicator.classList.remove('border-primary', 'bg-primary');
+                indicator.classList.add('border-outline-variant');
+                indicator.innerHTML = ''; // Remove inner dot
+                
+                const icon = card.querySelector('.material-symbols-outlined');
+                icon.classList.remove('text-primary');
+                icon.classList.add('text-on-surface-variant');
+            });
+
+            // Apply active styles to parent label
+            const activeCard = selectedInput.closest('.radio-card');
+            activeCard.classList.remove('border-outline-variant/50', 'bg-surface-container', 'border');
+            activeCard.classList.add('border-primary', 'bg-primary/5', 'border-2');
+
+            const activeIndicator = activeCard.querySelector('.radio-indicator');
+            activeIndicator.classList.remove('border-outline-variant');
+            activeIndicator.classList.add('border-primary', 'bg-primary');
+            activeIndicator.innerHTML = '<div class="w-2 h-2 rounded-full bg-background indicator-inner"></div>';
+            
+            const activeIcon = activeCard.querySelector('.material-symbols-outlined');
+            activeIcon.classList.remove('text-on-surface-variant');
+            activeIcon.classList.add('text-primary');
+        }
+
+        // Password visibility toggle
+        function togglePassword() {
+            const input = document.getElementById('export_passphrase');
+            const icon = document.getElementById('visibility_icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+
+        // Simple strength meter visualization
+        function updateStrength(val) {
+            const s1 = document.getElementById('strength-1');
+            const s2 = document.getElementById('strength-2');
+            const s3 = document.getElementById('strength-3');
+            const s4 = document.getElementById('strength-4');
+            const text = document.getElementById('strength-text');
+            
+            const len = val.length;
+            
+            // Reset colors
+            [s1, s2, s3, s4].forEach(el => {
+                el.className = el.className.replace(/bg-\w+(-\w+)?(\/\d+)?/g, 'bg-surface-variant');
+            });
+            text.className = text.className.replace(/text-\w+(-\w+)?/g, 'text-outline-variant');
+
+            if (len === 0) {
+                text.textContent = 'Awaiting input';
+                return;
+            }
+
+            if (len < 8) {
+                s1.classList.replace('bg-surface-variant', 'bg-error');
+                text.textContent = 'Too short';
+                text.classList.replace('text-outline-variant', 'text-error');
+            } else if (len < 12) {
+                s1.classList.replace('bg-surface-variant', 'bg-tertiary');
+                s2.classList.replace('bg-surface-variant', 'bg-tertiary');
+                text.textContent = 'Weak';
+                text.classList.replace('text-outline-variant', 'text-tertiary');
+            } else if (len < 16) {
+                s1.classList.replace('bg-surface-variant', 'bg-secondary');
+                s2.classList.replace('bg-surface-variant', 'bg-secondary');
+                s3.classList.replace('bg-surface-variant', 'bg-secondary');
+                text.textContent = 'Good';
+                text.classList.replace('text-outline-variant', 'text-secondary');
+            } else {
+                s1.classList.replace('bg-surface-variant', 'bg-secondary');
+                s2.classList.replace('bg-surface-variant', 'bg-secondary');
+                s3.classList.replace('bg-surface-variant', 'bg-secondary');
+                s4.classList.replace('bg-surface-variant', 'bg-secondary');
+                text.textContent = 'Optimal configuration';
+                text.classList.replace('text-outline-variant', 'text-secondary');
+            }
+        }
+    </script>
+</body></html>

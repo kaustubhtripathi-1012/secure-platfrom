@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CipherVault - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffddb8",
+                      "inverse-on-surface": "#283044",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "surface-tint": "#c0c1ff",
+                      "on-surface-variant": "#c7c4d7",
+                      "outline": "#908fa0",
+                      "outline-variant": "#464554",
+                      "tertiary-container": "#ca8100",
+                      "on-tertiary-container": "#3e2400",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#4edea3",
+                      "primary-fixed": "#e1e0ff",
+                      "surface-container-lowest": "#060e20",
+                      "on-error": "#690005",
+                      "surface-bright": "#31394d",
+                      "surface-container-highest": "#2d3449",
+                      "secondary-fixed": "#6ffbbe",
+                      "secondary-container": "#00a572",
+                      "secondary": "#4edea3",
+                      "on-secondary-container": "#00311f",
+                      "on-primary-container": "#0d0096",
+                      "on-primary": "#1000a9",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-background": "#dae2fd",
+                      "on-primary-fixed": "#07006c",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "error-container": "#93000a",
+                      "surface-container": "#171f33",
+                      "surface-container-high": "#222a3d",
+                      "on-secondary": "#003824",
+                      "surface-variant": "#2d3449",
+                      "on-tertiary": "#472a00",
+                      "tertiary": "#ffb95f",
+                      "on-secondary-fixed": "#002113",
+                      "surface-container-low": "#131b2e",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-surface": "#dae2fd",
+                      "primary": "#c0c1ff",
+                      "background": "#0b1326",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "primary-container": "#8083ff",
+                      "surface": "#0b1326",
+                      "on-secondary-fixed-variant": "#005236",
+                      "surface-dim": "#0b1326",
+                      "inverse-primary": "#494bd6",
+                      "inverse-surface": "#dae2fd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "base": "8px",
+                      "container-max": "1280px",
+                      "margin-desktop": "40px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "code-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "code-md": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "code-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "code-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24 selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar (Mobile/Desktop Web) -->
+<header class="fixed top-0 w-full z-50 shadow-sm border-b border-outline-variant/30 bg-surface/80 backdrop-blur-xl hidden md:flex">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16">
+<!-- Leading -->
+<div class="flex items-center gap-4">
+<img alt="User Avatar" class="w-8 h-8 rounded-full object-cover border border-outline-variant/50" data-alt="A stylized, high-tech abstract avatar of a user in a deep space setting. Cyberpunk aesthetic with glowing purple and cyan accents, set against a dark, metallic background. The avatar exudes a sense of digital sovereignty and intense focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs_ZzXgfRseNmG-prJQNU8OLKW7cYd820GFbJbo6zaEnrqOnWmv5fVG11mZWNEOsantEb03V8vN73z2M0WZsWcTrXgTJqA0z5m_4WI_F1G21yyYHgvRSMJqp61IooFLMHE5PIZJ4Fi4R4IwOkCAsWnZGhbQIv1MXLlXOKiIs8wnLmWKBNWzW88XjCBR9Whqz770P2i_6uD0YwPW5zvcmHrukF8dabVR75_QaRFAuu6KHM_UIpgVshF9g"/>
+</div>
+<!-- Headline -->
+<h1 class="text-headline-sm font-headline-sm font-bold tracking-tighter text-primary">CIPHER_VAULT</h1>
+<!-- Trailing -->
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-100 p-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-8 md:pt-28 pb-8 flex flex-col gap-gutter">
+<!-- Welcome Section -->
+<section class="flex flex-col gap-2 md:gap-4 mb-4">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">System Status: <span class="text-secondary font-code-md">SECURE</span></h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">Vault access granted. Ready for cryptographic operations.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter auto-rows-[minmax(180px,auto)]">
+<!-- Action Card: Encrypt -->
+<a class="col-span-1 md:col-span-6 lg:col-span-4 bg-surface-container/50 border border-outline-variant/30 rounded-xl p-6 relative overflow-hidden group hover:border-secondary transition-colors duration-300 backdrop-blur-sm active:scale-[0.98]" href="#">
+<!-- Subtle glow effect behind -->
+<div class="absolute inset-0 bg-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="bg-secondary-container/20 p-3 rounded-lg text-secondary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest bg-secondary/10 px-2 py-1 rounded">Action</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2 relative z-10 group-hover:text-secondary transition-colors">Encrypt New Message</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant relative z-10">Secure text or files using AES-256-GCM. Generate highly secure payloads.</p>
+</a>
+<!-- Action Card: Decrypt -->
+<a class="col-span-1 md:col-span-6 lg:col-span-4 bg-surface-container/50 border border-outline-variant/30 rounded-xl p-6 relative overflow-hidden group hover:border-primary transition-colors duration-300 backdrop-blur-sm active:scale-[0.98]" href="#">
+<!-- Subtle glow effect behind -->
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="bg-primary-container/20 p-3 rounded-lg text-primary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">lock_open</span>
+</div>
+<span class="text-label-caps font-label-caps text-primary uppercase tracking-widest bg-primary/10 px-2 py-1 rounded">Action</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2 relative z-10 group-hover:text-primary transition-colors">Decrypt Message</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant relative z-10">Extract plain text from secured vaults using your private keys.</p>
+</a>
+<!-- Storage Status Widget -->
+<div class="col-span-1 md:col-span-12 lg:col-span-4 bg-surface-container-high border border-outline-variant/20 rounded-xl p-6 flex flex-col justify-between">
+<div>
+<h3 class="text-body-lg font-body-lg text-on-surface-variant mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">database</span>
+                        Storage Status
+                    </h3>
+<div class="text-headline-lg font-headline-lg text-on-surface mt-2">
+                        2,048 <span class="text-body-md font-body-md text-on-surface-variant">entries</span>
+</div>
+</div>
+<div class="mt-6">
+<div class="flex justify-between text-code-sm font-code-sm text-outline mb-2">
+<span>SQLite DB Usage</span>
+<span>42%</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant/10">
+<div class="bg-tertiary h-full w-[42%] rounded-full shadow-[0_0_8px_rgba(255,185,95,0.5)]"></div>
+</div>
+</div>
+</div>
+<!-- Recent Activity List -->
+<div class="col-span-1 md:col-span-12 bg-surface-container/30 border border-outline-variant/20 rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                        Recent Activity
+                    </h3>
+<a class="text-label-caps font-label-caps text-primary hover:text-primary-fixed transition-colors" href="#">View All</a>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Activity Item 1 -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/10 rounded-lg hover:border-outline-variant/40 transition-colors cursor-default">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<h4 class="text-body-md font-body-md text-on-surface mb-0.5">Encrypted Payload</h4>
+<p class="text-code-sm font-code-sm text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                                    ID: 0x9f...a1b2
+                                </p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-code-sm font-code-sm text-outline">12 mins ago</span>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/10 rounded-lg hover:border-outline-variant/40 transition-colors cursor-default">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock_open</span>
+</div>
+<div>
+<h4 class="text-body-md font-body-md text-on-surface mb-0.5">Decrypted Message</h4>
+<p class="text-code-sm font-code-sm text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+                                    Source: [REDACTED]
+                                </p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-code-sm font-code-sm text-outline">2 hrs ago</span>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/10 rounded-lg hover:border-outline-variant/40 transition-colors cursor-default">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<h4 class="text-body-md font-body-md text-on-surface mb-0.5">Encrypted File</h4>
+<p class="text-code-sm font-code-sm text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                                    Size: 4.2 MB
+                                </p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-code-sm font-code-sm text-outline">1 day ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/90 backdrop-blur-xl rounded-t-xl border-t border-outline-variant/30 shadow-lg md:hidden">
+<!-- Active Tab: Dashboard -->
+<a class="flex flex-col items-center justify-center bg-primary-container/20 text-on-primary-container rounded-full px-4 py-1 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-label-caps font-label-caps mt-1">Dashboard</span>
+</a>
+<!-- Inactive Tab: Encrypt -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 px-2 py-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">lock</span>
+<span class="text-label-caps font-label-caps mt-1">Encrypt</span>
+</a>
+<!-- Inactive Tab: Decrypt -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 px-2 py-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">lock_open</span>
+<span class="text-label-caps font-label-caps mt-1">Decrypt</span>
+</a>
+<!-- Inactive Tab: History -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:bg-surface-variant/50 active:scale-90 transition-all duration-200 px-2 py-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">history</span>
+<span class="text-label-caps font-label-caps mt-1">History</span>
+</a>
+</nav>
+</body></html>
