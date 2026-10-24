@@ -260,18 +260,22 @@
                 <div id="login-error" class="text-error text-code-sm font-code-sm bg-error/10 border border-error/20 p-3 rounded-lg hidden"></div>
 
                 <!-- Action Button -->
-                <div class="pt-2 sm:pt-4">
-                    <button class="w-full flex justify-center items-center gap-2 py-3.5 sm:py-4 px-6 bg-[#6366F1] hover:bg-[#4f46e5] text-white rounded-lg text-base sm:text-headline-sm font-headline-sm glow-btn active:scale-95 duration-100 font-semibold" type="submit">
+                <div class="pt-2 sm:pt-4 space-y-3">
+                    <button class="w-full flex justify-center items-center gap-2 py-3.5 sm:py-4 px-6 bg-[#6366F1] hover:bg-[#4f46e5] text-white rounded-lg text-base sm:text-headline-sm font-headline-sm glow-btn active:scale-95 duration-100 font-semibold cursor-pointer" type="submit">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock_open</span>
                         Secure Login
+                    </button>
+                    <button id="btn-demo-login" class="w-full flex justify-center items-center gap-2 py-3 px-6 bg-secondary/15 hover:bg-secondary/25 text-secondary border border-secondary/40 rounded-lg text-sm sm:text-base font-semibold active:scale-95 duration-100 cursor-pointer" type="button">
+                        <span class="material-symbols-outlined text-[20px]">bolt</span>
+                        ⚡ 1-Click Instant Demo Access (No Passphrase)
                     </button>
                 </div>
             </form>
             
             <div class="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-outline-variant/30 text-center">
                 <p class="text-body-sm font-body-sm text-on-surface-variant">
-                    New Operative? 
-                    <a class="text-secondary hover:text-secondary-fixed transition-colors font-semibold ml-1" href="javascript:alert('Clearance levels are managed by System Admins. Access credentials for this demo are admin@ciphervault.local / admin123.')">Request Provisioning</a>
+                    Demo Credentials: 
+                    <span class="text-primary font-mono text-xs ml-1">admin@ciphervault.local / admin123</span>
                 </p>
             </div>
         </div>
@@ -318,11 +322,15 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="flex flex-col sm:flex-row w-full gap-3 sm:gap-4 justify-center">
-                    <button onclick="handleLogout()" class="w-full sm:w-auto px-6 py-3 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors text-body-md font-headline-sm order-2 sm:order-1 focus:outline-none">
+                <div class="flex flex-col sm:flex-row w-full gap-3 sm:gap-4 justify-center items-center">
+                    <button onclick="handleLogout()" class="w-full sm:w-auto px-6 py-3 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors text-body-md font-headline-sm order-3 sm:order-1 focus:outline-none cursor-pointer">
                         Back
                     </button>
-                    <button id="continue-btn" disabled class="w-full sm:w-auto px-8 py-3 rounded-lg bg-surface-variant text-on-surface-variant border border-outline-variant/30 cursor-not-allowed text-body-md font-headline-sm order-1 sm:order-2 transition-all duration-300 flex items-center justify-center gap-2">
+                    <button id="skip-2fa-btn" onclick="state.is2faCompleted = true; window.location.hash = '#dashboard';" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-secondary/20 text-secondary border border-secondary/40 hover:bg-secondary/30 text-body-md font-headline-sm order-1 sm:order-2 transition-all flex items-center justify-center gap-2 cursor-pointer font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">bolt</span>
+                        <span>Skip & Enter Vault</span>
+                    </button>
+                    <button id="continue-btn" disabled class="w-full sm:w-auto px-8 py-3 rounded-lg bg-surface-variant text-on-surface-variant border border-outline-variant/30 cursor-not-allowed text-body-md font-headline-sm order-2 sm:order-3 transition-all duration-300 flex items-center justify-center gap-2">
                         <span>Continue</span>
                         <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                     </button>

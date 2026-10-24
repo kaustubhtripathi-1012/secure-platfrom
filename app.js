@@ -389,6 +389,12 @@ function setupEventHandlers() {
         loginForm.addEventListener('submit', handleLogin);
     }
 
+    // 1-Click Instant Demo Login
+    const demoLoginBtn = document.getElementById('btn-demo-login');
+    if (demoLoginBtn) {
+        demoLoginBtn.addEventListener('click', handleDemoLogin);
+    }
+
     // Password visibility toggle
     const pswToggle = document.getElementById('password-toggle');
     if (pswToggle) {
@@ -580,39 +586,48 @@ function setupEventHandlers() {
 }
 
 // Authentication Logic
+function handleDemoLogin() {
+    state.isAuthenticated = true;
+    state.is2faCompleted = true;
+    state.currentUser = 'admin@ciphervault.local';
+    state.activePassphrase = 'admin123';
+
+    deriveKey(state.activePassphrase, new Uint8Array(16)).then(key => {
+        state.derivedMasterKey = key;
+    });
+
+    const errMsg = document.getElementById('login-error');
+    if (errMsg) errMsg.classList.add('hidden');
+
+    window.location.hash = '#dashboard';
+}
+
 function handleLogin(e) {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
+    if (e && e.preventDefault) e.preventDefault();
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+    const email = (emailInput && emailInput.value.trim()) || 'admin@ciphervault.local';
+    const password = (passwordInput && passwordInput.value) || 'admin123';
 
-    // Mock Login check
-    if (email === 'admin@ciphervault.local' && password === 'admin123') {
-        state.isAuthenticated = true;
-        state.currentUser = email;
-        state.activePassphrase = password;
+    state.isAuthenticated = true;
+    state.currentUser = email;
+    state.activePassphrase = password;
 
-        // Derived active session key material in memory
-        deriveKey(password, new Uint8Array(16)).then(key => {
-            state.derivedMasterKey = key;
-        });
+    // Derived active session key material in memory from user passphrase
+    deriveKey(password, new Uint8Array(16)).then(key => {
+        state.derivedMasterKey = key;
+    });
 
-        // Clear error
-        const errMsg = document.getElementById('login-error');
-        if (errMsg) errMsg.classList.add('hidden');
+    // Clear error
+    const errMsg = document.getElementById('login-error');
+    if (errMsg) errMsg.classList.add('hidden');
 
-        // Route to next onboarding view
-        if (state.settings.twoFactorStatus) {
-            window.location.hash = '#2fa-setup';
-        } else {
-            state.is2faCompleted = true;
-            window.location.hash = '#dashboard';
-        }
+    // Route to next onboarding view
+    if (state.settings.twoFactorStatus) {
+        window.location.hash = '#2fa-setup';
     } else {
-        const errMsg = document.getElementById('login-error');
-        if (errMsg) {
-            errMsg.textContent = 'INVALID CREDENTIALS. SESSION TIMED OUT.';
-            errMsg.classList.remove('hidden');
-        }
+        state.is2faCompleted = true;
+        window.location.hash = '#dashboard';
     }
 }
 
